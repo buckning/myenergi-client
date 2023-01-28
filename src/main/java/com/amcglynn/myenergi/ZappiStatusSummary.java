@@ -1,0 +1,28 @@
+package com.amcglynn.myenergi;
+
+import com.amcglynn.myenergi.units.KiloWattHour;
+import com.amcglynn.myenergi.units.Watt;
+import lombok.ToString;
+
+/**
+ * This class converts the raw values from the API and provides some convenience methods.
+ */
+@ToString
+public class ZappiStatusSummary {
+
+    private Watt gridImport;
+    private Watt gridExport;
+    private Watt consumed;
+    private Watt generated;
+    private Watt charge;
+    private KiloWattHour chargeAddedThisSession;
+
+    public ZappiStatusSummary(ZappiStatus zappiStatus) {
+        gridImport = new Watt(Math.max(0, zappiStatus.getGridWatts()));
+        gridExport = new Watt(Math.abs(Math.min(0, zappiStatus.getGridWatts())));
+        generated = new Watt(zappiStatus.getSolarGeneration());
+        consumed = new Watt(generated).add(gridImport).subtract(gridExport);
+        chargeAddedThisSession = new KiloWattHour(zappiStatus.getChargeAddedThisSessionKwh());
+        charge = new Watt(zappiStatus.getCarDiversionAmountWatts());
+    }
+}
