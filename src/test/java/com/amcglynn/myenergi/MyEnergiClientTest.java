@@ -18,7 +18,6 @@ class MyEnergiClientTest {
         var zappis = client.getZappiStatus().getZappi()
                 .stream().map(ZappiStatusSummary::new).collect(Collectors.toList());
         assertThat(zappis).isNotNull().hasSize(1);
-        client.setZappiChargeMode(ZappiChargeMode.ECO_PLUS);
     }
 
     @Disabled("Disabled as this requires a real serial number and API key")

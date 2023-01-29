@@ -58,7 +58,7 @@ public class MyEnergiClient {
     }
 
     public ZappiStatusResponse getZappiStatus() {
-        var response = getRequest("/cgi-jstatus-Z");
+        var response = getRequest("/cgi-jstatus-Z" + serialNumber);
         try {
             return new ObjectMapper().readValue(response, new TypeReference<>(){});
         } catch (JsonProcessingException e) {
