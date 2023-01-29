@@ -19,6 +19,11 @@ public class ZappiStatus {
     private Double chargeAddedThisSessionKwh;
     @JsonProperty("grd")
     private Long gridWatts = 0L; // minus means pushing back to grid, positive means importing
+    @JsonProperty("zmo")
+    private int zappiChargeMode;  //1=Fast, 2=Eco, 3=Eco+, 4=Stopped
+
+    @JsonProperty("pst")
+    private String evConnectionStatus;
 
 //    {
 //        "zappi": [

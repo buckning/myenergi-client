@@ -2,6 +2,7 @@ package com.amcglynn.myenergi;
 
 import java.io.IOException;
 import java.net.URI;
+import java.time.LocalDate;
 
 import com.amcglynn.myenergi.exception.ClientException;
 import com.amcglynn.myenergi.exception.InvalidResponseFormatException;
@@ -35,8 +36,10 @@ public class MyEnergiClient {
     private HttpHost targetHost;
     private HttpClient httpClient;
     private HttpClientContext httpClientContext;
+    private final String serialNumber;
 
     public MyEnergiClient(String serialNumber, String apiKey) {
+        this.serialNumber = serialNumber;
         targetHost = new HttpHost(DIRECTOR_BASE_URL.getHost(), DIRECTOR_BASE_URL.getPort(), "https");
 
         credsProvider = new BasicCredentialsProvider();
