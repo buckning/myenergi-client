@@ -5,5 +5,9 @@ public enum ZappiChargeMode {
     FAST,
     ECO,
     ECO_PLUS,
-    STOP
+    STOP;
+
+    public int getApiValue() {
+        return ordinal() + 1;
+    }
 }

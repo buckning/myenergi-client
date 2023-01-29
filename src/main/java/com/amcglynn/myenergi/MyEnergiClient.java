@@ -48,6 +48,15 @@ public class MyEnergiClient {
                 new UsernamePasswordCredentials(serialNumber, apiKey));
     }
 
+    /**
+     * Set the charge mode of Zappi. Note that this API does not take effect immediately and can take a few seconds to
+     * complete, presumably because the server communicates with the Zappi asynchronously to change the mode.
+     * @param zappiChargeMode the mode being switched to
+     */
+    public void setZappiChargeMode(ZappiChargeMode zappiChargeMode) {
+        getRequest("/cgi-zappi-mode-Z" + serialNumber + "-" + zappiChargeMode.getApiValue() + "-0-0-0000");
+    }
+
     public ZappiStatusResponse getZappiStatus() {
         var response = getRequest("/cgi-jstatus-Z");
         try {
