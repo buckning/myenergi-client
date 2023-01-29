@@ -1,4 +1,4 @@
-package com.amcglynn.myenergi;
+package com.amcglynn.myenergi.apiresponse;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

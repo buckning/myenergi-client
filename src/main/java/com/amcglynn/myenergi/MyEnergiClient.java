@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDate;
 
+import com.amcglynn.myenergi.apiresponse.ZappiDayHistory;
+import com.amcglynn.myenergi.apiresponse.ZappiHourlyDayHistory;
+import com.amcglynn.myenergi.apiresponse.ZappiStatusResponse;
 import com.amcglynn.myenergi.exception.ClientException;
 import com.amcglynn.myenergi.exception.InvalidResponseFormatException;
 import com.amcglynn.myenergi.exception.ServerCommunicationException;
@@ -59,6 +62,26 @@ public class MyEnergiClient {
 
     public ZappiStatusResponse getZappiStatus() {
         var response = getRequest("/cgi-jstatus-Z" + serialNumber);
+        try {
+            return new ObjectMapper().readValue(response, new TypeReference<>(){});
+        } catch (JsonProcessingException e) {
+            throw new InvalidResponseFormatException();
+        }
+    }
+
+    public ZappiHourlyDayHistory getZappiHourlyHistory(LocalDate localDate) {
+        var response = getRequest("/cgi-jdayhour-Z" + serialNumber + "-" + localDate.getYear() +
+                "-" + localDate.getMonthValue()  + "-" + localDate.getDayOfMonth());
+        try {
+            return new ObjectMapper().readValue(response, new TypeReference<>(){});
+        } catch (JsonProcessingException e) {
+            throw new InvalidResponseFormatException();
+        }
+    }
+
+    public ZappiDayHistory getZappiHistory(LocalDate localDate) {
+        var response = getRequest("/cgi-jday-Z" + serialNumber + "-" + localDate.getYear() +
+                "-" + localDate.getMonthValue()  + "-" + localDate.getDayOfMonth());
         try {
             return new ObjectMapper().readValue(response, new TypeReference<>(){});
         } catch (JsonProcessingException e) {

@@ -13,9 +13,7 @@ To generate an API key, click on **Advanced** under the device on the [Manage Pr
 A pop-up will open and there will be a **Generate new API Key** button. A new pop-up will open with the API key.
 
 # Road map
-* Get minute by minute Zappi historical data
 * Add optional linear interpolation for when data points are missing
-* Get hour by hour Zappi historical data
 * Unlock charger for immediate charging
 * Set and read Zappi Boost times
 * Add lock status to get status retrieval

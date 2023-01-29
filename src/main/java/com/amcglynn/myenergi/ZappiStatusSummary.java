@@ -1,5 +1,6 @@
 package com.amcglynn.myenergi;
 
+import com.amcglynn.myenergi.apiresponse.ZappiStatus;
 import com.amcglynn.myenergi.units.KiloWattHour;
 import com.amcglynn.myenergi.units.Watt;
 import lombok.ToString;

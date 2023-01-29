@@ -1,4 +1,4 @@
-package com.amcglynn.myenergi;
+package com.amcglynn.myenergi.apiresponse;
 
 import lombok.Getter;
 import lombok.Setter;

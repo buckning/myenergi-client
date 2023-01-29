@@ -3,6 +3,8 @@ package com.amcglynn.myenergi;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,5 +27,23 @@ class MyEnergiClientTest {
     void setZappiChargeMode() {
         var client = new MyEnergiClient(serialNumber, apiKey);
         client.setZappiChargeMode(ZappiChargeMode.ECO_PLUS);
+    }
+
+    @Disabled("Disabled as this requires a real serial number and API key")
+    @Test
+    void getZappiHourlyHistory() {
+        var client = new MyEnergiClient(serialNumber, apiKey);
+        var date = LocalDate.now().minus(1, ChronoUnit.DAYS);
+        var hourlyHistory = client.getZappiHourlyHistory(date);
+        assertThat(hourlyHistory.getReadings()).hasSize(24);
+    }
+
+    @Disabled("Disabled as this requires a real serial number and API key")
+    @Test
+    void getZappiHistory() {
+        var client = new MyEnergiClient(serialNumber, apiKey);
+        var date = LocalDate.now().minus(1, ChronoUnit.DAYS);
+        var hourlyHistory = client.getZappiHistory(date);
+        assertThat(hourlyHistory.getReadings()).hasSize(1440);
     }
 }
