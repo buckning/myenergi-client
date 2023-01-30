@@ -2,7 +2,7 @@ package com.amcglynn.myenergi.units;
 
 
 public class Joule {
-    private Long value;
+    private final Long value;
 
     public Joule() {
         this.value = 0L;
@@ -16,7 +16,11 @@ public class Joule {
         return value;
     }
 
-    public void add(Joule joule) {
-        value += joule.getLong();
+    public Joule add(Joule joule) {
+        return new Joule(value + joule.getLong());
+    }
+
+    public Joule subtract(Joule joule) {
+        return new Joule(value - joule.getLong());
     }
 }

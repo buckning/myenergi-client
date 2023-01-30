@@ -36,6 +36,8 @@ class MyEnergiClientTest {
         var date = LocalDate.now().minus(1, ChronoUnit.DAYS);
         var hourlyHistory = client.getZappiHourlyHistory(date);
         assertThat(hourlyHistory.getReadings()).hasSize(24);
+        var summary = new ZappiDaySummary(hourlyHistory.getReadings());
+        assertThat(summary.getEvSummary()).isNotNull();
     }
 
     @Disabled("Disabled as this requires a real serial number and API key")
@@ -44,6 +46,7 @@ class MyEnergiClientTest {
         var client = new MyEnergiClient(serialNumber, apiKey);
         var date = LocalDate.now().minus(1, ChronoUnit.DAYS);
         var hourlyHistory = client.getZappiHistory(date);
-        assertThat(hourlyHistory.getReadings()).hasSize(1440);
+        var summary = new ZappiDaySummary(hourlyHistory.getReadings());
+        assertThat(summary.getEvSummary()).isNotNull();
     }
 }
