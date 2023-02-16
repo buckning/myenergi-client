@@ -3,7 +3,7 @@ package com.amcglynn.myenergi.aws;
 import com.amcglynn.myenergi.ZappiChargeMode;
 import com.amcglynn.myenergi.ZappiStatusSummary;
 import com.amcglynn.myenergi.apiresponse.ZappiStatus;
-import com.amcglynn.myenergi.aws.ZappiStatusSummaryCardResponse;
+import com.amcglynn.myenergi.aws.view.ZappiStatusSummaryCardResponse;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
