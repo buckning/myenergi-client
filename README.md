@@ -12,6 +12,11 @@ the device information and will be prefixed with SN.
 To generate an API key, click on **Advanced** under the device on the [Manage Products](https://myaccount.myenergi.com/location#products) page.
 A pop-up will open and there will be a **Generate new API Key** button. A new pop-up will open with the API key.
 
+# Alexa Skill
+There is an Alexa skill under the com.amcglynn.myenergi.aws directory which allows the user to set the charge mode
+by saying the following.
+* "Alexa, ask My Zappi to set the charge mode to Eco plus"
+
 # Road map
 * Add optional linear interpolation for when data points are missing
 * Unlock charger for immediate charging
