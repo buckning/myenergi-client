@@ -13,6 +13,6 @@ public class KiloWatt {
 
     @Override
     public String toString() {
-        return String.format("%.1f",value);
+        return String.format("%.1f", value);
     }
 }

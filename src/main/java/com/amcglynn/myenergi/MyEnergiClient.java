@@ -51,6 +51,12 @@ public class MyEnergiClient {
                 new UsernamePasswordCredentials(serialNumber, apiKey));
     }
 
+    protected MyEnergiClient(String serialNumber, String apiKey, HttpClient httpClient, HttpClientContext context) {
+        this(serialNumber, apiKey);
+        this.httpClient = httpClient;
+        this.httpClientContext = context;
+    }
+
     /**
      * Set the charge mode of Zappi. Note that this API does not take effect immediately and can take a few seconds to
      * complete, presumably because the server communicates with the Zappi asynchronously to change the mode.

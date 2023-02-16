@@ -21,8 +21,10 @@ public class ZappiStatusSummary {
     @Getter
     private Watt generated;
     private Watt charge;
+    @Getter
     private KiloWattHour chargeAddedThisSession;
     private EvConnectionStatus evConnectionStatus;
+    @Getter
     private ZappiChargeMode chargeMode;
 
     public ZappiStatusSummary(ZappiStatus zappiStatus) {

@@ -16,22 +16,28 @@ public class WelcomeRequestHandler implements RequestHandler {
         return true;
     }
 
-    private String getEnergyUsage() {
+    private String getEnergyUsage(ZappiStatusSummary summary) {
+        var response = "solar generation is " + new KiloWatt(summary.getGenerated()) + " Kilowatts. ";
+        response += "Importing " + new KiloWatt(summary.getGridImport()) + " Kilowatts from the grid. ";
+        System.out.println(response);
+        return response;
+    }
+
+    private ZappiStatusSummary getZappiStatusSummary() {
         var apiKey = System.getenv("myEnergiHubApiKey");
         var serialNumber = System.getenv("myEnergiHubSerialNumber");
         var client = new MyEnergiClient(serialNumber, apiKey);
         var zappis = client.getZappiStatus().getZappi()
                 .stream().map(ZappiStatusSummary::new).collect(Collectors.toList());
-        var response = "solar generation is " + new KiloWatt(zappis.get(0).getGenerated()) + " Kilowatts. ";
-        response += "Importing " + new KiloWatt(zappis.get(0).getGridImport()) + " Kilowatts from the grid. ";
-        System.out.println(response);
-        return response;
+        return zappis.get(0);
     }
 
     @Override
     public Optional<Response> handle(HandlerInput handlerInput) {
+        var summary = getZappiStatusSummary();
         return handlerInput.getResponseBuilder()
-                .withSpeech(getEnergyUsage())
+                .withSpeech(getEnergyUsage(summary))
+                .withSimpleCard("Zappi Summary", new ZappiStatusSummaryCardResponse(summary).toString())
                 .build();
     }
 }
