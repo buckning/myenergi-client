@@ -10,10 +10,12 @@ import com.amcglynn.myenergi.units.KiloWatt;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.amazon.ask.request.Predicates.intentName;
+
 public class WelcomeRequestHandler implements RequestHandler {
     @Override
     public boolean canHandle(HandlerInput handlerInput) {
-        return true;
+        return !handlerInput.matches(intentName("SetChargeMode"));
     }
 
     private String getEnergyUsage(ZappiStatusSummary summary) {

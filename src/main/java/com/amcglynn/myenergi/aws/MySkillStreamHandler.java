@@ -7,6 +7,7 @@ public class MySkillStreamHandler extends SkillStreamHandler {
     public MySkillStreamHandler() {
         super(Skills.standard()
                 .addRequestHandler(new WelcomeRequestHandler())
+                .addRequestHandler(new SetChargeModeIntentHandler())
                 .build());
     }
 }
