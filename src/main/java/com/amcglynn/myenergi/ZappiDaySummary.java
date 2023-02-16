@@ -27,6 +27,8 @@ public class ZappiDaySummary {
         var evDivertedJoules = new Joule();
         var evTotalJoules = new Joule();
 
+        detectMissingDataPoints(dataPoints);
+
         for (var dp : dataPoints) {
             solarGenerationJoules.add(dp.getSolarGeneration());
             evBoostJoules.add(dp.getBoost());
@@ -68,5 +70,13 @@ public class ZappiDaySummary {
         public KiloWattHour getTotalKwH() {
             return this.total;
         }
+    }
+
+    private void detectMissingDataPoints(List<ZappiHistory> dataPoints) {
+        // store current and previous
+        // calculate the time period between the two
+        // if it is greater than 1, the interval distance is to be calculated
+        // the reading at current and previous are to be taken and then a slope is to be calculated for the two points
+        // The gaps are then to be filled in
     }
 }

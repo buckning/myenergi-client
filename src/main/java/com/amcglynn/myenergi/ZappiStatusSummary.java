@@ -3,6 +3,7 @@ package com.amcglynn.myenergi;
 import com.amcglynn.myenergi.apiresponse.ZappiStatus;
 import com.amcglynn.myenergi.units.KiloWattHour;
 import com.amcglynn.myenergi.units.Watt;
+import lombok.Getter;
 import lombok.ToString;
 
 /**
@@ -11,13 +12,19 @@ import lombok.ToString;
 @ToString
 public class ZappiStatusSummary {
 
+    @Getter
     private Watt gridImport;
+    @Getter
     private Watt gridExport;
+    @Getter
     private Watt consumed;
+    @Getter
     private Watt generated;
     private Watt charge;
+    @Getter
     private KiloWattHour chargeAddedThisSession;
     private EvConnectionStatus evConnectionStatus;
+    @Getter
     private ZappiChargeMode chargeMode;
 
     public ZappiStatusSummary(ZappiStatus zappiStatus) {

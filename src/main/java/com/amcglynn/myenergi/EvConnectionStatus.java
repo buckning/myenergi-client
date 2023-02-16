@@ -7,10 +7,10 @@ import java.util.Map;
 
 public enum EvConnectionStatus {
     EV_DISCONNECTED("A"),
-    EV_CONNECTED("B1"),
-    WAITING_FOR_EV("B2"),   // plugged in, charging is complete. Does this happen when waiting for PV charge?
+    EV_CONNECTED("B1"),     // plugged in, waiting for PV charge (awaiting surplus)
+    WAITING_FOR_EV("B2"),   // plugged in, charging is complete
     READY_TO_CHARGE("C1"),
-    CHARGING("C2"),
+    CHARGING("C2"),         // plugged in, charging from PV or grid
     FAULT("F"),
     UNKNOWN("U");
 

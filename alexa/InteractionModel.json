@@ -1,0 +1,126 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "my zappi",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "name": "summary",
+          "slots": [],
+          "samples": [
+            "give me my electricity summary",
+            "tell me my electricity usage",
+            "electricity usage",
+            "give me my electricity usage",
+            "what's my summary",
+            "give me my summary",
+            "summary"
+          ]
+        },
+        {
+          "name": "SetChargeMode",
+          "slots": [
+            {
+              "name": "ChargeMode",
+              "type": "chargeMode",
+              "samples": [
+                "Please change to {ChargeMode} mode",
+                "I want {ChargeMode} mode",
+                "{ChargeMode}"
+              ]
+            }
+          ],
+          "samples": [
+            "set charge mode to {ChargeMode}"
+          ]
+        }
+      ],
+      "types": [
+        {
+          "name": "chargeMode",
+          "values": [
+            {
+              "id": "2",
+              "name": {
+                "value": "ECO"
+              }
+            },
+            {
+              "id": "4",
+              "name": {
+                "value": "STOP"
+              }
+            },
+            {
+              "id": "3",
+              "name": {
+                "value": "ECO+"
+              }
+            },
+            {
+              "id": "1",
+              "name": {
+                "value": "FAST"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "dialog": {
+      "intents": [
+        {
+          "name": "SetChargeMode",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "ChargeMode",
+              "type": "chargeMode",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.502862545532.234134617018"
+              }
+            }
+          ]
+        }
+      ],
+      "delegationStrategy": "ALWAYS"
+    },
+    "prompts": [
+      {
+        "id": "Elicit.Slot.502862545532.234134617018",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Please let me know what charge mode you need"
+          },
+          {
+            "type": "PlainText",
+            "value": "You need to provide a charge mode"
+          }
+        ]
+      }
+    ]
+  }
+}
