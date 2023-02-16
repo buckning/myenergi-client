@@ -31,7 +31,7 @@ public class ZappiStatusSummaryCardResponse {
 
     private String getChargingInformation(ZappiStatusSummary summary) {
         var str = "Charge mode is " + summary.getChargeMode() + "\n";
-        str += "Charge added this session is " + summary.getChargeAddedThisSession() + " KilowWatt Hours\n";
+        str += "Charge added this session is " + summary.getChargeAddedThisSession() + " KiloWatt Hours\n";
         return str;
     }
 

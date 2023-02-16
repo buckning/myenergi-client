@@ -15,7 +15,7 @@ class ZappiStatusSummaryCardResponseTest {
         var summary = new ZappiStatusSummary(zappiStatus().build());
         var card = new ZappiStatusSummaryCardResponse(summary);
         assertThat(card).hasToString("Solar generation is 3.5 KiloWatts.\nCharge mode is FAST\n"
-                + "Charge added this session is 0.0 KilowWatt Hours\n");
+                + "Charge added this session is 0.0 KiloWatt Hours\n");
     }
 
     private ZappiStatus.ZappiStatusBuilder zappiStatus() {
