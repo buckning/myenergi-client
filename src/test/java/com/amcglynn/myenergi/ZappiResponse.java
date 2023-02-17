@@ -2,6 +2,14 @@ package com.amcglynn.myenergi;
 
 public class ZappiResponse {
 
+    public static String getErrorResponse() {
+        return "{\"status\":\"-14\",\"statustext\":\"\"}";
+    }
+
+    public static String getGenericResponse() {
+        return "{\"status\":0,\"statustext\":\"\",\"asn\":\"s18.myenergi.net\"}";
+    }
+
     public static String getExampleResponse() {
         return "{\n" +
                 "    \"zappi\": [\n" +
