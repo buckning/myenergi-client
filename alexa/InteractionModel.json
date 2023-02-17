@@ -27,6 +27,9 @@
           "name": "summary",
           "slots": [],
           "samples": [
+            "give me my energy usage",
+            "energy usage",
+            "what's my energy usage",
             "give me my electricity summary",
             "tell me my electricity usage",
             "electricity usage",
@@ -69,6 +72,17 @@
           "samples": [
             "switch to solar",
             "go green"
+          ]
+        },
+        {
+          "name": "StopBoostMode",
+          "slots": [],
+          "samples": [
+            "disable boost",
+            "disable boost mode",
+            "stop boosting",
+            "Stop boost",
+            "Stop boost mode"
           ]
         }
       ],

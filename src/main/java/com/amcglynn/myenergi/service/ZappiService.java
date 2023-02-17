@@ -25,4 +25,8 @@ public class ZappiService {
     public void setChargeMode(ZappiChargeMode chargeMode) {
         client.setZappiChargeMode(chargeMode);
     }
+
+    public void stopBoost() {
+        client.stopBoost();
+    }
 }

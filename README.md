@@ -77,3 +77,4 @@ by saying the following.
 * Add lock status to get status retrieval
 * Integrate Progressive Responses
 * Integrate Alexa Settings APIs
+* Alexa Presentation Language (APL)

@@ -3,6 +3,7 @@ package com.amcglynn.myenergi;
 import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.amcglynn.myenergi.apiresponse.ZappiDayHistory;
 import com.amcglynn.myenergi.apiresponse.ZappiHourlyDayHistory;
@@ -10,6 +11,7 @@ import com.amcglynn.myenergi.apiresponse.ZappiStatusResponse;
 import com.amcglynn.myenergi.exception.ClientException;
 import com.amcglynn.myenergi.exception.InvalidResponseFormatException;
 import com.amcglynn.myenergi.exception.ServerCommunicationException;
+import com.amcglynn.myenergi.units.KiloWattHour;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -73,6 +75,36 @@ public class MyEnergiClient {
         } catch (JsonProcessingException e) {
             throw new InvalidResponseFormatException();
         }
+    }
+
+    /**
+     * Boost the number of kilowatt hours to the ev
+     * @param kiloWattHour
+     */
+    public void boost(KiloWattHour kiloWattHour) {
+///cgi-zappi-mode-Z10077777-0-10-5-0000
+//
+//        where 0 is Boost - 10 is Boost Mode - 5 is the KWh to add
+    }
+
+    public void boost(LocalDateTime endTime) {
+///cgi-zappi-mode-Z10077777-0-11-5-1400
+//
+//        where 0 is Boost - 11 is Smart Boost Mode - 5 is the KWh to add, 1400 is the time the boost should complete.
+//
+    }
+
+    public void boost(LocalDateTime endTime, KiloWattHour kiloWattHour) {
+///cgi-zappi-mode-Z10077777-0-11-5-1400
+//
+//        where 0 is Boost - 11 is Smart Boost Mode - 5 is the KWh to add, 1400 is the time the boost should complete.
+//
+
+    }
+
+    public void stopBoost() {
+//        /cgi-zappi-mode-Z10077777-0-2-0-0000
+        getRequest("/cgi-zappi-mode-Z" + serialNumber + "-0-2-0-0000");
     }
 
     public ZappiHourlyDayHistory getZappiHourlyHistory(LocalDate localDate) {
