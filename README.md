@@ -15,7 +15,7 @@ A pop-up will open and there will be a **Generate new API Key** button. A new po
 # Alexa Skill
 There is an Alexa skill under the com.amcglynn.myenergi.aws directory which allows the user to set the charge mode
 by saying the following.
-* "Alexa, ask My Zappi to set the charge mode to Eco plus". Note that it may take a few minutes for the Zappi to change the charge mode
+* "Alexa, ask My Zappi to start charging". Note that it may take a few minutes for the Zappi to change the charge mode
 
 # Create/Configure the Skill
 
@@ -68,10 +68,12 @@ by saying the following.
 ## Test the Alexa Skill through the Alexa console
 1. Click on the **Test** tab in the Alexa console
 2. Select **Development** from the dropdown
-3. Under the **Alexa Simulator** type the following command: **Ask my zappi to set the charge mode to Fast**
+3. Under the **Alexa Simulator** type the following command: **Ask my zappi to switch to solar**
 
 # Road map
 * Add optional linear interpolation for when data points are missing
 * Unlock charger for immediate charging
 * Set and read Zappi Boost times
 * Add lock status to get status retrieval
+* Integrate Progressive Responses
+* Integrate Alexa Settings APIs

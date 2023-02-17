@@ -21,7 +21,7 @@ public class ZappiSummaryIntentHandler implements RequestHandler {
 
     @Override
     public boolean canHandle(HandlerInput handlerInput) {
-        return !handlerInput.matches(intentName("SetChargeMode"));
+        return handlerInput.matches(intentName("summary"));
     }
 
     private String getEnergyUsage(ZappiStatusSummary summary) {

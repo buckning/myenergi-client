@@ -50,7 +50,25 @@
             }
           ],
           "samples": [
+            "to change to {ChargeMode} mode",
+            "switch to {ChargeMode}",
             "set charge mode to {ChargeMode}"
+          ]
+        },
+        {
+          "name": "ChargeMyCar",
+          "slots": [],
+          "samples": [
+            "start charging",
+            "Charge my car"
+          ]
+        },
+        {
+          "name": "GoGreen",
+          "slots": [],
+          "samples": [
+            "switch to solar",
+            "go green"
           ]
         }
       ],
