@@ -27,12 +27,9 @@
           "name": "summary",
           "slots": [],
           "samples": [
-<<<<<<< HEAD
             "give me my energy usage",
             "energy usage",
             "what's my energy usage",
-=======
->>>>>>> main
             "give me my electricity summary",
             "tell me my electricity usage",
             "electricity usage",
@@ -56,7 +53,6 @@
             }
           ],
           "samples": [
-<<<<<<< HEAD
             "to change to {ChargeMode} mode",
             "switch to {ChargeMode}",
             "set charge mode to {ChargeMode}"
@@ -118,10 +114,6 @@
             "Boost until {Time}",
             "Boost for {Duration}"
           ]
-=======
-            "set charge mode to {ChargeMode}"
-          ]
->>>>>>> main
         }
       ],
       "types": [
@@ -193,8 +185,4 @@
       }
     ]
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> main
