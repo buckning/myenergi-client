@@ -84,6 +84,36 @@
             "Stop boost",
             "Stop boost mode"
           ]
+        },
+        {
+          "name": "StartBoostMode",
+          "slots": [
+            {
+              "name": "Duration",
+              "type": "AMAZON.DURATION"
+            },
+            {
+              "name": "Time",
+              "type": "AMAZON.TIME"
+            },
+            {
+              "name": "KiloWattHours",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "Charge for {KiloWattHours} kilowatt hours",
+            "Charge {KiloWattHours} kilowatt hours",
+            "Add {KiloWattHours} kilowatts",
+            "Add {KiloWattHours} kilowatt hours",
+            "Add {KiloWattHours} kilowatt hours to my car",
+            "Add {KiloWattHours} kilowatts now",
+            "Add {KiloWattHours} kilowatts to my car",
+            "Boost for {KiloWattHours} kilowatts",
+            "Boost for {KiloWattHours} Kilowatt hours",
+            "Boost until {Time}",
+            "Boost for {Duration}"
+          ]
         }
       ],
       "types": [

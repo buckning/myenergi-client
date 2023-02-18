@@ -21,11 +21,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayInputStream;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -80,7 +79,7 @@ class MyEnergiClientTest {
     @Test
     void testBoostModeThrowsInvalidRequestExceptionWhenMinuteIsNotDivisibleBy15() throws Exception {
         when(mockEntity.getContent()).thenReturn(new ByteArrayInputStream(ZappiResponse.getErrorResponse().getBytes()));
-        var endTime = LocalDateTime.now().withMinute(3);
+        var endTime = LocalTime.now().withMinute(3);
         var kiloWattHour = new KiloWattHour(5);
 
         assertThatThrownBy(() -> client.boost(endTime, kiloWattHour))
@@ -89,7 +88,7 @@ class MyEnergiClientTest {
 
     @Test
     void testSmartBoostUrlIsCorrectlyFormed() throws Exception {
-        var endTime = LocalDateTime.now().withHour(2).withMinute(15);
+        var endTime = LocalTime.now().withHour(2).withMinute(15);
 
         client.boost(endTime, new KiloWattHour(5));
         verify(mockClient).execute(any(HttpHost.class), httpGetCaptor.capture(), any(HttpClientContext.class));
@@ -99,7 +98,7 @@ class MyEnergiClientTest {
 
     @Test
     void testSmartBoostWithOnlyEndTimeSpecifiedChangesTheChargeAmountTo99Kwh() throws Exception {
-        var endTime = LocalDateTime.now().withHour(15).withMinute(45);
+        var endTime = LocalTime.now().withHour(15).withMinute(45);
 
         client.boost(endTime);
         verify(mockClient).execute(any(HttpHost.class), httpGetCaptor.capture(), any(HttpClientContext.class));
@@ -132,7 +131,7 @@ class MyEnergiClientTest {
                 .hasToString(expectedUrl);
     }
 
-    public static Stream<Arguments> chargeModesAndExpectedUrls() {
+    private static Stream<Arguments> chargeModesAndExpectedUrls() {
         return Stream.of(
                 Arguments.of(ZappiChargeMode.FAST, "/cgi-zappi-mode-Z12345678-1-0-0-0000"),
                 Arguments.of(ZappiChargeMode.ECO_PLUS, "/cgi-zappi-mode-Z12345678-3-0-0-0000"),

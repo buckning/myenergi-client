@@ -3,7 +3,7 @@ package com.amcglynn.myenergi;
 import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import com.amcglynn.myenergi.apiresponse.GenericResponse;
@@ -45,7 +45,7 @@ public class MyEnergiClient {
     private HttpClient httpClient;
     private HttpClientContext httpClientContext;
     private final String serialNumber;
-    private final LocalDateTime localDateTimeMidnight = LocalDateTime.now().withMinute(0).withHour(0);
+    private final LocalTime localTimeMidnight = LocalTime.now().withMinute(0).withHour(0);
     private final KiloWattHour zeroKwh = new KiloWattHour(0.0);
     private final KiloWattHour maxKwh = new KiloWattHour(99.0);
 
@@ -80,27 +80,27 @@ public class MyEnergiClient {
      * @param zappiChargeMode the mode being switched to
      */
     public void setZappiChargeMode(ZappiChargeMode zappiChargeMode) {
-        invokeCgiZappiModeApi(zappiChargeMode, ZappiBoostMode.OFF, zeroKwh, localDateTimeMidnight);
+        invokeCgiZappiModeApi(zappiChargeMode, ZappiBoostMode.OFF, zeroKwh, localTimeMidnight);
     }
 
     public void boost(KiloWattHour kiloWattHour) {
-        invokeCgiZappiModeApi(ZappiChargeMode.BOOST, ZappiBoostMode.BOOST, kiloWattHour, localDateTimeMidnight);
+        invokeCgiZappiModeApi(ZappiChargeMode.BOOST, ZappiBoostMode.BOOST, kiloWattHour, localTimeMidnight);
     }
 
-    public void boost(LocalDateTime endTime) {
+    public void boost(LocalTime endTime) {
         invokeCgiZappiModeApi(ZappiChargeMode.BOOST, ZappiBoostMode.SMART_BOOST, maxKwh, endTime);
     }
 
-    public void boost(LocalDateTime endTime, KiloWattHour kiloWattHour) {
+    public void boost(LocalTime endTime, KiloWattHour kiloWattHour) {
         invokeCgiZappiModeApi(ZappiChargeMode.BOOST, ZappiBoostMode.SMART_BOOST, kiloWattHour, endTime);
     }
 
     public void stopBoost() {
-        invokeCgiZappiModeApi(ZappiChargeMode.BOOST, ZappiBoostMode.STOP, zeroKwh, localDateTimeMidnight);
+        invokeCgiZappiModeApi(ZappiChargeMode.BOOST, ZappiBoostMode.STOP, zeroKwh, localTimeMidnight);
     }
 
     private void invokeCgiZappiModeApi(ZappiChargeMode zappiChargeMode, ZappiBoostMode zappiBoostMode,
-                                       KiloWattHour kiloWattHour, LocalDateTime endTime) {
+                                       KiloWattHour kiloWattHour, LocalTime endTime) {
         var kwh = validateAndClamp(kiloWattHour);
 
         var formatter = DateTimeFormatter.ofPattern("HHmm");
