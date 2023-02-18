@@ -3,13 +3,18 @@ package com.amcglynn.myenergi;
 import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
+import com.amcglynn.myenergi.apiresponse.GenericResponse;
 import com.amcglynn.myenergi.apiresponse.ZappiDayHistory;
 import com.amcglynn.myenergi.apiresponse.ZappiHourlyDayHistory;
 import com.amcglynn.myenergi.apiresponse.ZappiStatusResponse;
 import com.amcglynn.myenergi.exception.ClientException;
+import com.amcglynn.myenergi.exception.InvalidRequestException;
 import com.amcglynn.myenergi.exception.InvalidResponseFormatException;
 import com.amcglynn.myenergi.exception.ServerCommunicationException;
+import com.amcglynn.myenergi.units.KiloWattHour;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,6 +45,9 @@ public class MyEnergiClient {
     private HttpClient httpClient;
     private HttpClientContext httpClientContext;
     private final String serialNumber;
+    private final LocalTime localTimeMidnight = LocalTime.now().withMinute(0).withHour(0);
+    private final KiloWattHour zeroKwh = new KiloWattHour(0.0);
+    private final KiloWattHour maxKwh = new KiloWattHour(99.0);
 
     public MyEnergiClient(String serialNumber, String apiKey) {
         this.serialNumber = serialNumber;
@@ -57,15 +65,6 @@ public class MyEnergiClient {
         this.httpClientContext = context;
     }
 
-    /**
-     * Set the charge mode of Zappi. Note that this API does not take effect immediately and can take a few seconds to
-     * complete, presumably because the server communicates with the Zappi asynchronously to change the mode.
-     * @param zappiChargeMode the mode being switched to
-     */
-    public void setZappiChargeMode(ZappiChargeMode zappiChargeMode) {
-        getRequest("/cgi-zappi-mode-Z" + serialNumber + "-" + zappiChargeMode.getApiValue() + "-0-0-0000");
-    }
-
     public ZappiStatusResponse getZappiStatus() {
         var response = getRequest("/cgi-jstatus-Z" + serialNumber);
         try {
@@ -73,6 +72,65 @@ public class MyEnergiClient {
         } catch (JsonProcessingException e) {
             throw new InvalidResponseFormatException();
         }
+    }
+
+    /**
+     * Set the charge mode of Zappi. Note that this API does not take effect immediately and can take a few seconds to
+     * complete, presumably because the server communicates with the Zappi asynchronously to change the mode.
+     * @param zappiChargeMode the mode being switched to
+     */
+    public void setZappiChargeMode(ZappiChargeMode zappiChargeMode) {
+        invokeCgiZappiModeApi(zappiChargeMode, ZappiBoostMode.OFF, zeroKwh, localTimeMidnight);
+    }
+
+    public void boost(KiloWattHour kiloWattHour) {
+        invokeCgiZappiModeApi(ZappiChargeMode.BOOST, ZappiBoostMode.BOOST, kiloWattHour, localTimeMidnight);
+    }
+
+    public void boost(LocalTime endTime) {
+        invokeCgiZappiModeApi(ZappiChargeMode.BOOST, ZappiBoostMode.SMART_BOOST, maxKwh, endTime);
+    }
+
+    public void boost(LocalTime endTime, KiloWattHour kiloWattHour) {
+        invokeCgiZappiModeApi(ZappiChargeMode.BOOST, ZappiBoostMode.SMART_BOOST, kiloWattHour, endTime);
+    }
+
+    public void stopBoost() {
+        invokeCgiZappiModeApi(ZappiChargeMode.BOOST, ZappiBoostMode.STOP, zeroKwh, localTimeMidnight);
+    }
+
+    private void invokeCgiZappiModeApi(ZappiChargeMode zappiChargeMode, ZappiBoostMode zappiBoostMode,
+                                       KiloWattHour kiloWattHour, LocalTime endTime) {
+        var kwh = validateAndClamp(kiloWattHour);
+
+        var formatter = DateTimeFormatter.ofPattern("HHmm");
+        String formattedTime = endTime.format(formatter);
+
+        var url = "/cgi-zappi-mode-Z" + serialNumber + "-" + zappiChargeMode.getApiValue() + "-"
+                + zappiBoostMode.getBoostValue() + "-" + kwh + "-" + formattedTime;
+        System.out.println("Invoking url " + url);
+        var responseStr = getRequest(url);
+        System.out.println("Response = " + responseStr);
+        validateResponse(responseStr);
+    }
+
+    private void validateResponse(String responseStr) {
+        try {
+            var response = new ObjectMapper().readValue(responseStr, new TypeReference<GenericResponse>(){});
+            if (response.getStatus() != 0) {
+                throw new InvalidRequestException(response.getStatus(), response.getStatusText());
+            }
+        } catch (JsonProcessingException e) {
+            throw new InvalidResponseFormatException();
+        }
+    }
+
+    private int validateAndClamp(KiloWattHour kiloWattHour) {
+        var kwh = (int) Math.round(kiloWattHour.getDouble());
+        if (kiloWattHour.getDouble() < 0) {
+            throw new IllegalArgumentException("KiloWattHours must be greater than 0");
+        }
+        return kwh;
     }
 
     public ZappiHourlyDayHistory getZappiHourlyHistory(LocalDate localDate) {
@@ -99,9 +157,9 @@ public class MyEnergiClient {
         try {
             configureDigestAuthentication();
 
-            var httpget = new HttpGet(endPointUrl);
+            var httpGet = new HttpGet(endPointUrl);
             var response = httpClient
-                    .execute(targetHost, httpget, httpClientContext);
+                    .execute(targetHost, httpGet, httpClientContext);
             handleServerRedirect(response);
             handleErrorResponse(response);
             return EntityUtils.toString(response.getEntity());

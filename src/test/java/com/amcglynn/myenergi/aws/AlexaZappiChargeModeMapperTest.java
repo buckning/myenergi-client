@@ -69,7 +69,9 @@ class AlexaZappiChargeModeMapperTest {
     })
     @ParameterizedTest
     void testInvalidInput(String input) {
-        assertThatThrownBy(() -> new AlexaZappiChargeModeMapper().getZappiChargeMode(input))
-                .isInstanceOf(IllegalArgumentException.class);
+        var alexaZappiChargeModeMapper = new AlexaZappiChargeModeMapper();
+        assertThatThrownBy(() ->
+                alexaZappiChargeModeMapper.getZappiChargeMode(input)
+        ).isInstanceOf(IllegalArgumentException.class);
     }
 }

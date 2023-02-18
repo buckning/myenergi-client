@@ -34,7 +34,7 @@ public class ZappiStatusSummary {
         consumed = new Watt(generated).add(gridImport).subtract(gridExport);
         // consumed  - charge can be broken down to house and car. House = (consumed - charge)
 
-        chargeMode = ZappiChargeMode.values()[zappiStatus.getZappiChargeMode() - 1];
+        chargeMode = ZappiChargeMode.values()[zappiStatus.getZappiChargeMode()];
 
         chargeAddedThisSession = new KiloWattHour(zappiStatus.getChargeAddedThisSessionKwh());
         charge = new Watt(zappiStatus.getCarDiversionAmountWatts());

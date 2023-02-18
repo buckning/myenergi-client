@@ -3,7 +3,8 @@ package com.amcglynn.myenergi;
 import lombok.Getter;
 
 public enum ZappiChargeMode {
-    //1=Fast, 2=Eco, 3=Eco+, 4=Stopped
+    //0=Boost, 1=Fast, 2=Eco, 3=Eco+, 4=Stopped
+    BOOST("Boost"),
     FAST("Fast"),
     ECO("Eco"),
     ECO_PLUS("Eco+"),
@@ -17,6 +18,6 @@ public enum ZappiChargeMode {
     }
 
     public int getApiValue() {
-        return ordinal() + 1;
+        return ordinal();
     }
 }

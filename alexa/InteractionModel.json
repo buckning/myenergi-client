@@ -27,6 +27,9 @@
           "name": "summary",
           "slots": [],
           "samples": [
+            "give me my energy usage",
+            "energy usage",
+            "what's my energy usage",
             "give me my electricity summary",
             "tell me my electricity usage",
             "electricity usage",
@@ -50,7 +53,66 @@
             }
           ],
           "samples": [
+            "to change to {ChargeMode} mode",
+            "switch to {ChargeMode}",
             "set charge mode to {ChargeMode}"
+          ]
+        },
+        {
+          "name": "ChargeMyCar",
+          "slots": [],
+          "samples": [
+            "start charging",
+            "Charge my car"
+          ]
+        },
+        {
+          "name": "GoGreen",
+          "slots": [],
+          "samples": [
+            "switch to solar",
+            "go green"
+          ]
+        },
+        {
+          "name": "StopBoostMode",
+          "slots": [],
+          "samples": [
+            "disable boost",
+            "disable boost mode",
+            "stop boosting",
+            "Stop boost",
+            "Stop boost mode"
+          ]
+        },
+        {
+          "name": "StartBoostMode",
+          "slots": [
+            {
+              "name": "Duration",
+              "type": "AMAZON.DURATION"
+            },
+            {
+              "name": "Time",
+              "type": "AMAZON.TIME"
+            },
+            {
+              "name": "KiloWattHours",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "Charge for {KiloWattHours} kilowatt hours",
+            "Charge {KiloWattHours} kilowatt hours",
+            "Add {KiloWattHours} kilowatts",
+            "Add {KiloWattHours} kilowatt hours",
+            "Add {KiloWattHours} kilowatt hours to my car",
+            "Add {KiloWattHours} kilowatts now",
+            "Add {KiloWattHours} kilowatts to my car",
+            "Boost for {KiloWattHours} kilowatts",
+            "Boost for {KiloWattHours} Kilowatt hours",
+            "Boost until {Time}",
+            "Boost for {Duration}"
           ]
         }
       ],
