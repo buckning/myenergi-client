@@ -5,7 +5,7 @@ import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
 import com.amazon.ask.request.RequestHelper;
 import com.amcglynn.myenergi.ZappiStatusSummary;
-import com.amcglynn.myenergi.aws.view.ZappiStatusSummaryCardResponse;
+import com.amcglynn.myenergi.aws.responses.ZappiStatusSummaryCardResponse;
 import com.amcglynn.myenergi.service.ZappiService;
 import com.amcglynn.myenergi.units.KiloWatt;
 

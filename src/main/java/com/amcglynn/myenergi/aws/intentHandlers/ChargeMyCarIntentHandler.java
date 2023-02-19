@@ -18,6 +18,10 @@ public class ChargeMyCarIntentHandler implements RequestHandler {
         this.zappiService = new ZappiService();
     }
 
+    protected ChargeMyCarIntentHandler(ZappiService zappiService) {
+        this.zappiService = zappiService;
+    }
+
     @Override
     public boolean canHandle(HandlerInput handlerInput) {
         return handlerInput.matches(intentName("ChargeMyCar"));
@@ -26,8 +30,10 @@ public class ChargeMyCarIntentHandler implements RequestHandler {
     @Override
     public Optional<Response> handle(HandlerInput handlerInput) {
         zappiService.setChargeMode(ZappiChargeMode.FAST);
+        String result = "Changed charging mode to fast. This may take a few minutes.";
         return handlerInput.getResponseBuilder()
-                .withSpeech("Changed charging mode to Fast. This may take a few minutes.")
+                .withSpeech(result)
+                .withSimpleCard("Charging...", result)
                 .build();
     }
 }

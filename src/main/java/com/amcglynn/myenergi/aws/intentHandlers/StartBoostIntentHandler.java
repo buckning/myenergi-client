@@ -22,6 +22,10 @@ public class StartBoostIntentHandler implements RequestHandler {
         this.zappiService = new ZappiService();
     }
 
+    protected StartBoostIntentHandler(ZappiService zappiService) {
+        this.zappiService = zappiService;
+    }
+
     @Override
     public boolean canHandle(HandlerInput handlerInput) {
         return handlerInput.matches(intentName("StartBoostMode"));
@@ -34,16 +38,12 @@ public class StartBoostIntentHandler implements RequestHandler {
         var kilowattHours = parseKiloWattHourSlot(handlerInput);
 
         if (kilowattHours.isPresent()) {
-            System.out.println("Adding " + kilowattHours + "kilowatt hours");
             zappiService.startBoost(kilowattHours.get());
             return buildResponse(handlerInput, kilowattHours.get());
         }
 
         if (time.isPresent()) {
             var localTime = LocalTime.parse(time.get());
-
-            String formattedTime = localTime.format(DateTimeFormatter.ofPattern("h:mm a"));
-            System.out.println("Boosting until " + formattedTime);
             zappiService.startSmartBoost(localTime);
             return buildResponse(handlerInput, localTime);
         }
@@ -51,7 +51,7 @@ public class StartBoostIntentHandler implements RequestHandler {
         if (duration.isPresent()) {
             return duration
                     .map(zappiService::startSmartBoost)
-                    .map(ldt -> buildResponse(handlerInput, ldt))
+                    .map(lt -> buildResponse(handlerInput, lt))
                     .orElseGet(() -> buildNotFoundResponse(handlerInput));
         }
 
@@ -61,18 +61,22 @@ public class StartBoostIntentHandler implements RequestHandler {
     private Optional<Response> buildNotFoundResponse(HandlerInput handlerInput) {
         return handlerInput.getResponseBuilder()
                 .withSpeech("Sorry, I didn't understand that")
+                .withSimpleCard("Sorry", "Sorry, I didn't understand that")
                 .build();
     }
 
     private Optional<Response> buildResponse(HandlerInput handlerInput, LocalTime endTime) {
         return handlerInput.getResponseBuilder()
                 .withSpeech("Boosting until " + endTime.format(DateTimeFormatter.ofPattern("h:mm a")))
+                .withSimpleCard("Boosting...", "Boosting until "
+                        + endTime.format(DateTimeFormatter.ofPattern("h:mm a")) + ".")
                 .build();
     }
 
     private Optional<Response> buildResponse(HandlerInput handlerInput, KiloWattHour kilowattHours) {
         return handlerInput.getResponseBuilder()
                 .withSpeech("Charging " + kilowattHours + " kilowatt hours")
+                .withSimpleCard("Charging...", "Charging " + kilowattHours + " kilowatt hours")
                 .build();
     }
 

@@ -1,4 +1,4 @@
-package com.amcglynn.myenergi.aws.view;
+package com.amcglynn.myenergi.aws.responses;
 
 import com.amcglynn.myenergi.ZappiStatusSummary;
 import com.amcglynn.myenergi.units.KiloWatt;
