@@ -3,6 +3,10 @@ package com.amcglynn.myenergi.aws.intentHandlers;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
+import com.amazon.ask.model.services.directive.Directive;
+import com.amazon.ask.model.services.directive.Header;
+import com.amazon.ask.model.services.directive.SendDirectiveRequest;
+import com.amazon.ask.model.services.directive.SpeakDirective;
 import com.amcglynn.myenergi.ZappiStatusSummary;
 import com.amcglynn.myenergi.aws.responses.ZappiStatusSummaryCardResponse;
 import com.amcglynn.myenergi.service.ZappiService;
@@ -37,6 +41,12 @@ public class ZappiSummaryIntentHandler implements RequestHandler {
 
     @Override
     public Optional<Response> handle(HandlerInput handlerInput) {
+        handlerInput.getServiceClientFactory().getDirectiveService()
+                .enqueue(SendDirectiveRequest.builder()
+                        .withDirective(SpeakDirective.builder().withSpeech("Sure").build())
+                        .withHeader(Header.builder().withRequestId(handlerInput.getRequestEnvelope().getRequest().getRequestId()).build())
+                        .build());
+
         var summary = zappiService.getStatusSummary().get(0);
         return handlerInput.getResponseBuilder()
                 .withSpeech(getEnergyUsage(summary))

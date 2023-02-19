@@ -75,6 +75,5 @@ by saying the following.
 * Unlock charger for immediate charging
 * Set and read Zappi Boost times
 * Add lock status to get status retrieval
-* Integrate Progressive Responses
 * Integrate Alexa Settings APIs
 * Alexa Presentation Language (APL)
