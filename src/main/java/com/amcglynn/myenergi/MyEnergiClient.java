@@ -108,9 +108,7 @@ public class MyEnergiClient {
 
         var url = "/cgi-zappi-mode-Z" + serialNumber + "-" + zappiChargeMode.getApiValue() + "-"
                 + zappiBoostMode.getBoostValue() + "-" + kwh + "-" + formattedTime;
-        System.out.println("Invoking url " + url);
         var responseStr = getRequest(url);
-        System.out.println("Response = " + responseStr);
         validateResponse(responseStr);
     }
 

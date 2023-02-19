@@ -9,23 +9,19 @@ import lombok.ToString;
 /**
  * This class converts the raw values from the API and provides some convenience methods.
  */
+@Getter
 @ToString
 public class ZappiStatusSummary {
 
-    @Getter
     private Watt gridImport;
-    @Getter
     private Watt gridExport;
-    @Getter
     private Watt consumed;
-    @Getter
     private Watt generated;
-    private Watt charge;
-    @Getter
+    private Watt evChargeRate;
     private KiloWattHour chargeAddedThisSession;
     private EvConnectionStatus evConnectionStatus;
-    @Getter
     private ZappiChargeMode chargeMode;
+    private ChargeStatus chargeStatus;
 
     public ZappiStatusSummary(ZappiStatus zappiStatus) {
         gridImport = new Watt(Math.max(0, zappiStatus.getGridWatts()));
@@ -34,10 +30,11 @@ public class ZappiStatusSummary {
         consumed = new Watt(generated).add(gridImport).subtract(gridExport);
         // consumed  - charge can be broken down to house and car. House = (consumed - charge)
 
+        chargeStatus = ChargeStatus.values()[zappiStatus.getChargeStatus()];
         chargeMode = ZappiChargeMode.values()[zappiStatus.getZappiChargeMode()];
 
         chargeAddedThisSession = new KiloWattHour(zappiStatus.getChargeAddedThisSessionKwh());
-        charge = new Watt(zappiStatus.getCarDiversionAmountWatts());
+        evChargeRate = new Watt(zappiStatus.getCarDiversionAmountWatts());
         evConnectionStatus = EvConnectionStatus.fromString(zappiStatus.getEvConnectionStatus());
     }
 }
