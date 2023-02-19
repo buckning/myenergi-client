@@ -4,7 +4,7 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.RequestEnvelope;
-import com.amcglynn.myenergi.ZappiChargeMode;
+import com.amazon.ask.model.Slot;
 import com.amcglynn.myenergi.service.ZappiService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,31 +18,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class GoGreenIntentHandlerTest {
+class StopBoostIntentHandlerTest {
 
     @Mock
     private ZappiService mockZappiService;
     private IntentRequest intentRequest;
 
-    private GoGreenIntentHandler handler;
+    private StopBoostIntentHandler handler;
 
     @BeforeEach
     void setUp() {
-        handler = new GoGreenIntentHandler(mockZappiService);
+        handler = new StopBoostIntentHandler(mockZappiService);
         intentRequest = IntentRequest.builder()
-                .withIntent(Intent.builder().withName("GoGreen").build())
+                .withIntent(Intent.builder().withName("StopBoostMode").build())
                 .build();
     }
 
     @Test
-    void testCanHandleOnlyTriggersForTheGoGreenIntent() {
+    void testCanHandleOnlyTriggersForTheIntent() {
         assertThat(handler.canHandle(handlerInputBuilder().build())).isTrue();
     }
 
     @Test
-    void testCanHandleReturnsFalseWhenNotGoGreenIntent() {
+    void testCanHandleReturnsFalseWhenNotTheCorrectIntent() {
         intentRequest = IntentRequest.builder()
-                .withIntent(Intent.builder().withName("SetChargeMode").build())
+                .withIntent(Intent.builder()
+                        .withName("SetChargeMode").build())
                 .build();
         assertThat(handler.canHandle(handlerInputBuilder().build())).isFalse();
     }
@@ -51,11 +52,9 @@ class GoGreenIntentHandlerTest {
     void testHandle() {
         var result = handler.handle(handlerInputBuilder().build());
         assertThat(result).isPresent();
-
-        verifySpeechInResponse(result.get(), "<speak>Changed charging mode to Eco+. This may take a few minutes.</speak>");
-        verifySimpleCardInResponse(result.get(), "Charging...", "Changed charging mode to Eco+. This may take a few minutes.");
-
-        verify(mockZappiService).setChargeMode(ZappiChargeMode.ECO_PLUS);
+        verifySpeechInResponse(result.get(), "<speak>Stopping boost mode now.</speak>");
+        verifySimpleCardInResponse(result.get(), "Stopping boost", "Stopping boost mode now.");
+        verify(mockZappiService).stopBoost();
     }
 
     private HandlerInput.Builder handlerInputBuilder() {
@@ -66,5 +65,13 @@ class GoGreenIntentHandlerTest {
     private RequestEnvelope.Builder requestEnvelopeBuilder() {
         return RequestEnvelope.builder()
                 .withRequest(intentRequest);
+    }
+
+    private void initIntentRequest(String slotName, String slotValue) {
+        intentRequest = IntentRequest.builder()
+                .withIntent(Intent.builder()
+                        .putSlotsItem(slotName, Slot.builder().withValue(slotValue).build())
+                        .withName("StartBoostMode").build())
+                .build();
     }
 }

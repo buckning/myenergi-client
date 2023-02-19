@@ -19,6 +19,7 @@ public class FallbackIntentHandler implements RequestHandler {
     public Optional<Response> handle(HandlerInput handlerInput) {
         return handlerInput.getResponseBuilder()
                 .withSpeech("Sorry, I don't know how to handle that. Please try again.")
+                .withSimpleCard("Sorry", "Sorry, I don't know how to handle that. Please try again.")
                 .build();
     }
 }

@@ -15,7 +15,11 @@ public class StopBoostIntentHandler implements RequestHandler {
     private final ZappiService zappiService;
 
     public StopBoostIntentHandler() {
-        this.zappiService = new ZappiService();
+        this(new ZappiService());
+    }
+
+    protected StopBoostIntentHandler(ZappiService zappiService) {
+        this.zappiService = zappiService;
     }
 
     @Override
@@ -28,6 +32,7 @@ public class StopBoostIntentHandler implements RequestHandler {
         zappiService.stopBoost();
         return handlerInput.getResponseBuilder()
                 .withSpeech("Stopping boost mode now.")
+                .withSimpleCard("Stopping boost", "Stopping boost mode now.")
                 .build();
     }
 }

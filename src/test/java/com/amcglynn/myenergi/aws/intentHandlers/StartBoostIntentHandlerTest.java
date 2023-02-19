@@ -4,11 +4,7 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.RequestEnvelope;
-import com.amazon.ask.model.Response;
 import com.amazon.ask.model.Slot;
-import com.amazon.ask.model.ui.SimpleCard;
-import com.amazon.ask.model.ui.SsmlOutputSpeech;
-import com.amcglynn.myenergi.ZappiChargeMode;
 import com.amcglynn.myenergi.service.ZappiService;
 import com.amcglynn.myenergi.units.KiloWattHour;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +17,8 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
+import static com.amcglynn.myenergi.aws.intentHandlers.ResponseVerifier.verifySimpleCardInResponse;
+import static com.amcglynn.myenergi.aws.intentHandlers.ResponseVerifier.verifySpeechInResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -100,21 +98,6 @@ class StartBoostIntentHandlerTest {
         assertThat(result).isPresent();
         verifySpeechInResponse(result.get(), "<speak>Sorry, I didn't understand that</speak>");
         verifySimpleCardInResponse(result.get(), "Sorry", "Sorry, I didn't understand that");
-    }
-
-    private void verifySpeechInResponse(Response response, String speechText) {
-        assertThat(response.getOutputSpeech()).isInstanceOf(SsmlOutputSpeech.class);
-        var ssmlOutputSpeech = (SsmlOutputSpeech) response.getOutputSpeech();
-        assertThat(ssmlOutputSpeech.getSsml())
-                .isEqualTo(speechText);
-    }
-
-    private void verifySimpleCardInResponse(Response response, String expectedTitle, String expectedContent) {
-        var card = response.getCard();
-        assertThat(card).isInstanceOf(SimpleCard.class);
-        var simpleCard = (SimpleCard) card;
-        assertThat(simpleCard.getTitle()).isEqualTo(expectedTitle);
-        assertThat(simpleCard.getContent()).isEqualTo(expectedContent);
     }
 
     private HandlerInput.Builder handlerInputBuilder() {
