@@ -1,5 +1,6 @@
 package com.amcglynn.myenergi.aws.responses;
 
+import com.amcglynn.myenergi.ChargeStatus;
 import com.amcglynn.myenergi.EvConnectionStatus;
 import com.amcglynn.myenergi.ZappiChargeMode;
 import com.amcglynn.myenergi.ZappiStatusSummary;
@@ -77,6 +78,20 @@ class ZappiStatusSummaryVoiceResponseTest {
         assertThat(response).hasToString("Solar generation is 1.5 kilowatts. Importing 5.5 kilowatts. " +
                 "Charging 7.0 kilowatts to your E.V. - Charge mode is Fast. " +
                 "Charge added this session is 20.2 kilowatt hours. ");
+    }
+
+    @Test
+    void testChargeComplete() {
+        var zappiStatus = zappiStatusBuilder()
+                .evConnectionStatus(EvConnectionStatus.EV_CONNECTED.getCode())
+                .zappiChargeMode(ZappiChargeMode.FAST.getApiValue())
+                .chargeStatus(ChargeStatus.COMPLETE.ordinal())
+                .chargeAddedThisSessionKwh(20.2)
+                .build();
+        var summary = new ZappiStatusSummary(zappiStatus);
+        var response = new ZappiStatusSummaryVoiceResponse(summary);
+        assertThat(response).hasToString("Charge mode is Fast. " +
+                "Charging session is complete. Charge added this session is 20.2 kilowatt hours. ");
     }
 
     private ZappiStatus.ZappiStatusBuilder zappiStatusBuilder() {

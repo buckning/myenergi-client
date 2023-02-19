@@ -16,6 +16,7 @@ public class ZappiStatusSummaryCardResponse {
         response += getChargingRate(summary);
         response += getChargeMode(summary);
         response += getBoostMode(summary);
+        response += getChargeComplete(summary);
         response += getChargeAdded(summary);
     }
 
@@ -67,6 +68,14 @@ public class ZappiStatusSummaryCardResponse {
         String str = "";
         if (summary.getChargeAddedThisSession().getDouble() > 0.01) {
             str += "Charge added: " + summary.getChargeAddedThisSession() + "kWh\n";
+        }
+        return str;
+    }
+
+    private String getChargeComplete(ZappiStatusSummary summary) {
+        String str = "";
+        if (summary.getChargeStatus() == ChargeStatus.COMPLETE) {
+            str += "Charge completed\n";
         }
         return str;
     }

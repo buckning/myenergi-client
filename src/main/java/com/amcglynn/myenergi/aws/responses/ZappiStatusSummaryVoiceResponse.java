@@ -15,6 +15,7 @@ public class ZappiStatusSummaryVoiceResponse {
         response += getGridImport(summary);
         response += getChargingRate(summary);
         response += getChargeMode(summary);
+        response += getChargeComplete(summary);
         response += getChargeAdded(summary);
     }
 
@@ -59,6 +60,14 @@ public class ZappiStatusSummaryVoiceResponse {
         String str = "";
         if (summary.getChargeAddedThisSession().getDouble() > 0.0) {
             str += "Charge added this session is " + summary.getChargeAddedThisSession() + " kilowatt hours. ";
+        }
+        return str;
+    }
+
+    private String getChargeComplete(ZappiStatusSummary summary) {
+        String str = "";
+        if (summary.getChargeStatus() == ChargeStatus.COMPLETE) {
+            str += "Charging session is complete. ";
         }
         return str;
     }

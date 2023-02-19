@@ -93,6 +93,20 @@ class ZappiStatusSummaryCardResponseTest {
                 "Charge added: 20.2kWh\n");
     }
 
+    @Test
+    void testChargeComplete() {
+        var zappiStatus = zappiStatusBuilder()
+                .evConnectionStatus(EvConnectionStatus.EV_CONNECTED.getCode())
+                .zappiChargeMode(ZappiChargeMode.FAST.getApiValue())
+                .chargeStatus(ChargeStatus.COMPLETE.ordinal())
+                .chargeAddedThisSessionKwh(20.2)
+                .build();
+        var summary = new ZappiStatusSummary(zappiStatus);
+        var response = new ZappiStatusSummaryCardResponse(summary);
+        assertThat(response).hasToString("Charge mode: Fast\n" +
+                "Charge completed\nCharge added: 20.2kWh\n");
+    }
+
     private ZappiStatus.ZappiStatusBuilder zappiStatusBuilder() {
         return ZappiStatus.builder()
                 .solarGeneration(0L)
@@ -100,6 +114,7 @@ class ZappiStatusSummaryCardResponseTest {
                 .zappiChargeMode(ZappiChargeMode.ECO_PLUS.getApiValue())
                 .carDiversionAmountWatts(0L)
                 .evConnectionStatus(EvConnectionStatus.EV_DISCONNECTED.toString())
+                .chargeStatus(ChargeStatus.PAUSED.ordinal())
                 .chargeAddedThisSessionKwh(0.0);
     }
 }
