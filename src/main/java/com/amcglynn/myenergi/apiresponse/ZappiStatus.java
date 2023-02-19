@@ -28,6 +28,9 @@ public class ZappiStatus {
     @JsonProperty("zmo")
     private int zappiChargeMode;  //1=Fast, 2=Eco, 3=Eco+, 4=Stopped
 
+    @JsonProperty("sta")
+    private int chargeStatus;
+
     @JsonProperty("pst")        // plug status
     private String evConnectionStatus;
 

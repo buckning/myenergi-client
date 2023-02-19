@@ -1,6 +1,6 @@
 package com.amcglynn.myenergi;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +22,7 @@ public enum EvConnectionStatus {
         }
     }
 
+    @Getter
     private String code;
 
     EvConnectionStatus(String code) {

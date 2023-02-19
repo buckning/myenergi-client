@@ -74,6 +74,7 @@ class MyEnergiClientTest {
         assertThat(zappiResponse.getChargeAddedThisSessionKwh()).isEqualTo(21.39);
         assertThat(zappiResponse.getEvConnectionStatus()).isEqualTo("A");
         assertThat(zappiResponse.getZappiChargeMode()).isEqualTo(3);
+        assertThat(zappiResponse.getChargeStatus()).isEqualTo(ChargeStatus.PAUSED.ordinal());
     }
 
     @Test

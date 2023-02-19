@@ -8,6 +8,7 @@ import com.amazon.ask.model.services.ServiceClientFactory;
 import com.amazon.ask.model.services.directive.DirectiveServiceClient;
 import com.amazon.ask.model.services.directive.SendDirectiveRequest;
 import com.amazon.ask.model.services.directive.SpeakDirective;
+import com.amcglynn.myenergi.ChargeStatus;
 import com.amcglynn.myenergi.EvConnectionStatus;
 import com.amcglynn.myenergi.ZappiChargeMode;
 import com.amcglynn.myenergi.ZappiStatusSummary;
@@ -71,14 +72,19 @@ class ZappiSummaryIntentHandlerTest {
         when(mockServiceClientFactory.getDirectiveService()).thenReturn(mockDirectiveServiceClient);
         when(mockZappiService.getStatusSummary()).thenReturn(List.of(new ZappiStatusSummary(
                 new ZappiStatus("12345678", 1500L, 1400L,
-                        24.3, 1000L, ZappiChargeMode.ECO_PLUS.getApiValue(), EvConnectionStatus.CHARGING.toString()))));
+                        24.3, 1000L, ZappiChargeMode.ECO_PLUS.getApiValue(),
+                        ChargeStatus.BOOSTING.ordinal(), EvConnectionStatus.CHARGING.getCode()))));
         var result = handler.handle(handlerInputBuilder().build());
         assertThat(result).isPresent();
-        verifySpeechInResponse(result.get(), "<speak>Solar generation is 1.5 Kilowatts. Importing 1.0 Kilowatts from the grid.</speak>");
-        verifySimpleCardInResponse(result.get(), "Zappi Summary", "Solar generation is 1.5 KiloWatts.\n"
-                + "Importing 1.0 KiloWatts from the grid\n"
-                + "Charge mode is ECO_PLUS\n"
-                + "Charge added this session is 24.3 KiloWatt Hours\n");
+        verifySpeechInResponse(result.get(), "<speak>Solar generation is 1.5 kilowatts. " +
+                "Importing 1.0 kilowatts. Boosting 1.4 kilowatts to your E.V. - Charge mode is Eco+. " +
+                "Charge added this session is 24.3 kilowatt hours.</speak>");
+        verifySimpleCardInResponse(result.get(), "Zappi Summary", "Solar: 1.5kW\n" +
+                "Import: 1.0kW\n" +
+                "Charge rate: 1.4kW\n" +
+                "Charge mode: Eco+\n" +
+                "Boost mode: enabled\n" +
+                "Charge added: 24.3kWh\n");
         verify(mockZappiService).getStatusSummary();
         verify(mockDirectiveServiceClient).enqueue(mockSendDirectiveRequestCaptor.capture());
         var directiveRequest = mockSendDirectiveRequestCaptor.getValue();
