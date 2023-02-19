@@ -3,6 +3,7 @@ package com.amcglynn.myenergi.aws;
 import com.amazon.ask.SkillStreamHandler;
 import com.amazon.ask.Skills;
 import com.amcglynn.myenergi.aws.intentHandlers.ChargeMyCarIntentHandler;
+import com.amcglynn.myenergi.aws.intentHandlers.FallbackIntentHandler;
 import com.amcglynn.myenergi.aws.intentHandlers.GoGreenIntentHandler;
 import com.amcglynn.myenergi.aws.intentHandlers.LaunchHandler;
 import com.amcglynn.myenergi.aws.intentHandlers.SetChargeModeIntentHandler;
@@ -14,6 +15,7 @@ public class MySkillStreamHandler extends SkillStreamHandler {
     public MySkillStreamHandler() {
         super(Skills.standard()
                 .addRequestHandler(new LaunchHandler())
+                .addRequestHandler(new FallbackIntentHandler())
                 .addRequestHandler(new StartBoostIntentHandler())
                 .addRequestHandler(new ZappiSummaryIntentHandler())
                 .addRequestHandler(new StopBoostIntentHandler())

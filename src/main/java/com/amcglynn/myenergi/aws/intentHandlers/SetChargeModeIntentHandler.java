@@ -17,7 +17,11 @@ public class SetChargeModeIntentHandler implements RequestHandler {
     private final AlexaZappiChargeModeMapper mapper;
 
     public SetChargeModeIntentHandler() {
-        this.zappiService = new ZappiService();
+        this(new ZappiService());
+    }
+
+    protected SetChargeModeIntentHandler(ZappiService zappiService) {
+        this.zappiService = zappiService;
         mapper = new AlexaZappiChargeModeMapper();
     }
 
@@ -36,7 +40,9 @@ public class SetChargeModeIntentHandler implements RequestHandler {
         var chargeMode = mapper.getZappiChargeMode(chargeModeSlot.getValue().toLowerCase());
         zappiService.setChargeMode(chargeMode);
         return handlerInput.getResponseBuilder()
-                .withSpeech("Changed charging mode to  " + chargeMode.getDisplayName() + ". This may take a few minutes.")
+                .withSpeech("Changed charging mode to " + chargeMode.getDisplayName() + ". This may take a few minutes.")
+                .withSimpleCard("Charging...", "Changed charging mode to "
+                        + chargeMode.getDisplayName() + ". This may take a few minutes.")
                 .build();
     }
 }

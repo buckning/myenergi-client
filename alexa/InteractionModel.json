@@ -24,7 +24,7 @@
           "samples": []
         },
         {
-          "name": "summary",
+          "name": "StatusSummary",
           "slots": [],
           "samples": [
             "give me my energy usage",
