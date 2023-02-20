@@ -1,4 +1,4 @@
-package com.amcglynn.myenergi.aws.intentHandlers;
+package com.amcglynn.myenergi.aws;
 
 import com.amazon.ask.model.Response;
 import com.amazon.ask.model.ui.SimpleCard;

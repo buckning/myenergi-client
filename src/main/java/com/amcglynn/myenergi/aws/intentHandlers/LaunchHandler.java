@@ -21,7 +21,7 @@ public class LaunchHandler implements LaunchRequestHandler {
                 .withSpeech("Hi, I can change your charge type and provide you energy usage. " +
                         "Ask me to start charging or to switch to solar. " +
                         "You can also ask me for an energy summary.")
-                .withSimpleCard("Greetings!", "I can change your charge type and provide you energy usage. " +
+                .withSimpleCard("My Zappi", "I can change your charge type and provide you energy usage. " +
                         "Ask me to start charging or to switch to solar. You can also ask me for an energy summary.")
                 .build();
     }

@@ -2,11 +2,15 @@ package com.amcglynn.myenergi.service;
 
 import com.amcglynn.myenergi.MyEnergiClient;
 import com.amcglynn.myenergi.ZappiChargeMode;
+import com.amcglynn.myenergi.ZappiDaySummary;
 import com.amcglynn.myenergi.ZappiStatusSummary;
 import com.amcglynn.myenergi.units.KiloWattHour;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Year;
+import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.function.Supplier;
@@ -56,6 +60,18 @@ public class ZappiService {
 
     public void stopBoost() {
         client.stopBoost();
+    }
+
+    public ZappiDaySummary getEnergyUsage(LocalDate localDate) {
+        return new ZappiDaySummary(client.getZappiHistory(localDate).getReadings());
+    }
+
+    public void getEnergyUsage(YearMonth yearMonth) {
+
+    }
+
+    public void getEnergyUsage(Year year) {
+
     }
 
     private LocalTime roundToNearest15Mins(Duration duration) {

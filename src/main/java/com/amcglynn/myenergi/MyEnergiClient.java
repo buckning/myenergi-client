@@ -143,7 +143,7 @@ public class MyEnergiClient {
 
     public ZappiDayHistory getZappiHistory(LocalDate localDate) {
         var response = getRequest("/cgi-jday-Z" + serialNumber + "-" + localDate.getYear() +
-                "-" + localDate.getMonthValue()  + "-" + localDate.getDayOfMonth());
+                "-" + localDate.getMonthValue() + "-" + localDate.getDayOfMonth());
         try {
             return new ObjectMapper().readValue(response, new TypeReference<>(){});
         } catch (JsonProcessingException e) {

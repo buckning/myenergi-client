@@ -7,8 +7,8 @@ import com.amazon.ask.model.RequestEnvelope;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.amcglynn.myenergi.aws.intentHandlers.ResponseVerifier.verifySimpleCardInResponse;
-import static com.amcglynn.myenergi.aws.intentHandlers.ResponseVerifier.verifySpeechInResponse;
+import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySimpleCardInResponse;
+import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySpeechInResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class FallbackIntentHandlerTest {
@@ -44,7 +44,7 @@ class FallbackIntentHandlerTest {
         assertThat(result).isPresent();
 
         verifySpeechInResponse(result.get(), "<speak>Sorry, I don't know how to handle that. Please try again.</speak>");
-        verifySimpleCardInResponse(result.get(), "Sorry", "Sorry, I don't know how to handle that. Please try again.");
+        verifySimpleCardInResponse(result.get(), "My Zappi", "Sorry, I don't know how to handle that. Please try again.");
     }
 
     private HandlerInput.Builder handlerInputBuilder() {

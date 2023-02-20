@@ -41,7 +41,7 @@ public class ZappiSummaryIntentHandler implements RequestHandler {
         var summary = zappiService.getStatusSummary().get(0);
         return handlerInput.getResponseBuilder()
                 .withSpeech(new ZappiStatusSummaryVoiceResponse(summary).toString())
-                .withSimpleCard("Zappi Summary", new ZappiStatusSummaryCardResponse(summary).toString())
+                .withSimpleCard("My Zappi", new ZappiStatusSummaryCardResponse(summary).toString())
                 .build();
     }
 }

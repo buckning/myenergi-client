@@ -22,7 +22,7 @@ public class StartBoostIntentHandler implements RequestHandler {
         this.zappiService = new ZappiService();
     }
 
-    protected StartBoostIntentHandler(ZappiService zappiService) {
+    public StartBoostIntentHandler(ZappiService zappiService) {
         this.zappiService = zappiService;
     }
 
@@ -61,7 +61,7 @@ public class StartBoostIntentHandler implements RequestHandler {
     private Optional<Response> buildNotFoundResponse(HandlerInput handlerInput) {
         return handlerInput.getResponseBuilder()
                 .withSpeech("Sorry, I didn't understand that")
-                .withSimpleCard("Sorry", "Sorry, I didn't understand that")
+                .withSimpleCard("My Zappi", "Sorry, I didn't understand that")
                 .build();
     }
 

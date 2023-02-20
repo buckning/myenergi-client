@@ -12,8 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.amcglynn.myenergi.aws.intentHandlers.ResponseVerifier.verifySimpleCardInResponse;
-import static com.amcglynn.myenergi.aws.intentHandlers.ResponseVerifier.verifySpeechInResponse;
+import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySimpleCardInResponse;
+import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySpeechInResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
@@ -53,7 +53,7 @@ class StopBoostIntentHandlerTest {
         var result = handler.handle(handlerInputBuilder().build());
         assertThat(result).isPresent();
         verifySpeechInResponse(result.get(), "<speak>Stopping boost mode now.</speak>");
-        verifySimpleCardInResponse(result.get(), "Stopping boost", "Stopping boost mode now.");
+        verifySimpleCardInResponse(result.get(), "My Zappi", "Stopping boost mode now.");
         verify(mockZappiService).stopBoost();
     }
 

@@ -24,8 +24,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.amcglynn.myenergi.aws.intentHandlers.ResponseVerifier.verifySimpleCardInResponse;
-import static com.amcglynn.myenergi.aws.intentHandlers.ResponseVerifier.verifySpeechInResponse;
+import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySimpleCardInResponse;
+import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySpeechInResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -79,7 +79,7 @@ class ZappiSummaryIntentHandlerTest {
         verifySpeechInResponse(result.get(), "<speak>Solar generation is 1.5 kilowatts. " +
                 "Importing 1.0 kilowatts. Boosting 1.4 kilowatts to your E.V. - Charge mode is Eco+. " +
                 "Charge added this session is 24.3 kilowatt hours.</speak>");
-        verifySimpleCardInResponse(result.get(), "Zappi Summary", "Solar: 1.5kW\n" +
+        verifySimpleCardInResponse(result.get(), "My Zappi", "Solar: 1.5kW\n" +
                 "Import: 1.0kW\n" +
                 "Charge rate: 1.4kW\n" +
                 "Charge mode: Eco+\n" +
