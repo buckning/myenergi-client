@@ -18,10 +18,6 @@ public class StartBoostIntentHandler implements RequestHandler {
 
     private final ZappiService zappiService;
 
-    public StartBoostIntentHandler() {
-        this.zappiService = new ZappiService();
-    }
-
     public StartBoostIntentHandler(ZappiService zappiService) {
         this.zappiService = zappiService;
     }

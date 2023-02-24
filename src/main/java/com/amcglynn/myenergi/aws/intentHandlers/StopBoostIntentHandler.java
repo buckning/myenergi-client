@@ -14,10 +14,6 @@ public class StopBoostIntentHandler implements RequestHandler {
 
     private final ZappiService zappiService;
 
-    public StopBoostIntentHandler() {
-        this(new ZappiService());
-    }
-
     public StopBoostIntentHandler(ZappiService zappiService) {
         this.zappiService = zappiService;
     }

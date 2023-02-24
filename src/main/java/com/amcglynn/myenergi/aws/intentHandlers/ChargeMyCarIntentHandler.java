@@ -14,10 +14,6 @@ public class ChargeMyCarIntentHandler implements RequestHandler {
 
     private final ZappiService zappiService;
 
-    public ChargeMyCarIntentHandler() {
-        this.zappiService = new ZappiService();
-    }
-
     public ChargeMyCarIntentHandler(ZappiService zappiService) {
         this.zappiService = zappiService;
     }

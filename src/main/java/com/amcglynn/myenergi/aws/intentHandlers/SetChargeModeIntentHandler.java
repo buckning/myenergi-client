@@ -16,10 +16,6 @@ public class SetChargeModeIntentHandler implements RequestHandler {
     private final ZappiService zappiService;
     private final AlexaZappiChargeModeMapper mapper;
 
-    public SetChargeModeIntentHandler() {
-        this(new ZappiService());
-    }
-
     public SetChargeModeIntentHandler(ZappiService zappiService) {
         this.zappiService = zappiService;
         mapper = new AlexaZappiChargeModeMapper();

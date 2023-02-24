@@ -7,6 +7,7 @@ import com.amazon.ask.model.RequestEnvelope;
 import com.amazon.ask.model.Slot;
 import com.amcglynn.myenergi.ZappiChargeMode;
 import com.amcglynn.myenergi.ZappiDaySummary;
+import com.amcglynn.myenergi.ZappiMonthSummary;
 import com.amcglynn.myenergi.service.ZappiService;
 import com.amcglynn.myenergi.units.KiloWattHour;
 import org.junit.jupiter.api.BeforeEach;
@@ -73,10 +74,27 @@ class GetEnergyUsageIntentHandlerTest {
     @Test
     void testHandleYearMonth() {
         initIntentRequest(YearMonth.of(2023, 2));
+
+        var zappiMonthSummary = mock(ZappiMonthSummary.class);
+        when(zappiMonthSummary.getYearMonth()).thenReturn(YearMonth.of(2022, 2));
+        when(zappiMonthSummary.getExported()).thenReturn(new KiloWattHour(50));
+        when(zappiMonthSummary.getImported()).thenReturn(new KiloWattHour(150));
+        when(zappiMonthSummary.getEvTotal()).thenReturn(new KiloWattHour(200));
+        when(zappiMonthSummary.getSolarGeneration()).thenReturn(new KiloWattHour(13));
+
+        when(mockZappiService.getEnergyUsage(YearMonth.of(2023, 2))).thenReturn(zappiMonthSummary);
         var result = handler.handle(handlerInputBuilder().build());
         assertThat(result).isPresent();
-        verifySpeechInResponse(result.get(), "<speak>Sure, this may take a few minutes</speak>");
-        verifySimpleCardInResponse(result.get(), "My Zappi", "Sure, this may take a few minutes.");
+        verifySpeechInResponse(result.get(), "<speak>Here's your usage for February 2022. " +
+                "Imported 150.0 kilowatt hours. " +
+                "Exported 50.0 kilowatt hours. " +
+                "Solar generation was 13.0 kilowatt hours. " +
+                "Charged 200.0 kilowatt hours to your E.V.</speak>");
+        verifySimpleCardInResponse(result.get(), "My Zappi", "Usage for February 2022\n" +
+                "Imported: 150.0kWh\n" +
+                "Exported: 50.0kWh\n" +
+                "Solar generated: 13.0kWh\n" +
+                "Charged: 200.0kWh\n");
         verify(mockZappiService).getEnergyUsage(YearMonth.of(2023, 2));
     }
 

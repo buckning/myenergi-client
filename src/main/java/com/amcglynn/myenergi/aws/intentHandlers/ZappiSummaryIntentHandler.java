@@ -17,10 +17,6 @@ import static com.amazon.ask.request.Predicates.intentName;
 public class ZappiSummaryIntentHandler implements RequestHandler {
     private final ZappiService zappiService;
 
-    public ZappiSummaryIntentHandler() {
-        this(new ZappiService());
-    }
-
     public ZappiSummaryIntentHandler(ZappiService zappiService) {
         this.zappiService = zappiService;
     }

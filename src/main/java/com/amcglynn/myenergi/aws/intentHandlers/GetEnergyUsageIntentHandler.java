@@ -3,11 +3,16 @@ package com.amcglynn.myenergi.aws.intentHandlers;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
+import com.amazon.ask.model.services.directive.Header;
+import com.amazon.ask.model.services.directive.SendDirectiveRequest;
+import com.amazon.ask.model.services.directive.SpeakDirective;
 import com.amazon.ask.request.RequestHelper;
 import com.amcglynn.myenergi.ZappiChargeMode;
 import com.amcglynn.myenergi.aws.exception.InvalidDateException;
 import com.amcglynn.myenergi.aws.responses.ZappiDaySummaryCardResponse;
 import com.amcglynn.myenergi.aws.responses.ZappiDaySummaryVoiceResponse;
+import com.amcglynn.myenergi.aws.responses.ZappiMonthSummaryCardResponse;
+import com.amcglynn.myenergi.aws.responses.ZappiMonthSummaryVoiceResponse;
 import com.amcglynn.myenergi.service.ZappiService;
 
 import java.time.LocalDate;
@@ -21,10 +26,6 @@ import static com.amazon.ask.request.Predicates.intentName;
 public class GetEnergyUsageIntentHandler implements RequestHandler {
 
     private final ZappiService zappiService;
-
-    public GetEnergyUsageIntentHandler() {
-        this.zappiService = new ZappiService();
-    }
 
     public GetEnergyUsageIntentHandler(ZappiService zappiService) {
         this.zappiService = zappiService;
@@ -60,8 +61,8 @@ public class GetEnergyUsageIntentHandler implements RequestHandler {
     }
 
     private Optional<Response> handleDate(HandlerInput handlerInput, String date) {
-        String cardResponse = "Sure, this may take a few minutes.";
-        String voiceResponse = "Sure, this may take a few minutes";
+        String cardResponse;
+        String voiceResponse;
         if (date.length() == 4) {
             zappiService.getEnergyUsage(Year.parse(date));
             return handlerInput.getResponseBuilder()
@@ -74,7 +75,18 @@ public class GetEnergyUsageIntentHandler implements RequestHandler {
         } else if (date.length() == 7) {
             var yearMonth = YearMonth.parse(date);
             validate(yearMonth);
-            zappiService.getEnergyUsage(yearMonth);
+            zappiService.registerNotificationListener((current, total) -> {
+                if (current % 5 == 0) {
+                    handlerInput.getServiceClientFactory().getDirectiveService()
+                            .enqueue(SendDirectiveRequest.builder()
+                                    .withDirective(SpeakDirective.builder().withSpeech("Calculating, please wait...").build())
+                                    .withHeader(Header.builder().withRequestId(handlerInput.getRequestEnvelope().getRequest().getRequestId()).build())
+                                    .build());
+                }
+            });
+            var summary = zappiService.getEnergyUsage(yearMonth);
+            voiceResponse = new ZappiMonthSummaryVoiceResponse(summary).toString();
+            cardResponse = new ZappiMonthSummaryCardResponse(summary).toString();
         } else {
             var localDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
             validate(localDate);

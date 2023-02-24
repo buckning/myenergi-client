@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ZappiStatusSummaryCardResponseTest {
 
     @Test
-    void testVoiceResponseReturnsChargeMode() {
+    void testCardResponseReturnsChargeMode() {
         var zappiStatus = zappiStatusBuilder().build();
         var summary = new ZappiStatusSummary(zappiStatus);
         var response = new ZappiStatusSummaryCardResponse(summary);

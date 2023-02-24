@@ -14,10 +14,6 @@ public class GoGreenIntentHandler implements RequestHandler {
 
     private final ZappiService zappiService;
 
-    public GoGreenIntentHandler() {
-        this.zappiService = new ZappiService();
-    }
-
     public GoGreenIntentHandler(ZappiService zappiService) {
         this.zappiService = zappiService;
     }
