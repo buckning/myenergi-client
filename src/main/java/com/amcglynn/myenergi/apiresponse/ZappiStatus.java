@@ -22,7 +22,7 @@ public class ZappiStatus {
     @JsonProperty("div")
     private Long carDiversionAmountWatts = 0L;
     @JsonProperty("che")
-    private Double chargeAddedThisSessionKwh;
+    private Double chargeAddedThisSessionKwh = 0.0;
     @JsonProperty("grd")
     private Long gridWatts = 0L; // minus means pushing back to grid, positive means importing
     @JsonProperty("zmo")
