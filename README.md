@@ -70,10 +70,12 @@ by saying the following.
 2. Select **Development** from the dropdown
 3. Under the **Alexa Simulator** type the following command: **Ask my zappi to switch to solar**
 
-# Road map
+# TODO
 * Add optional linear interpolation for when data points are missing
 * Unlock charger for immediate charging
 * Set and read Zappi Boost times
 * Add lock status to get status retrieval
 * Integrate Alexa Settings APIs
 * Alexa Presentation Language (APL)
+* Add to flash briefing
+* Get breakdown of energy usage by electricity rate. e.g. day rate, night rate and peak rate

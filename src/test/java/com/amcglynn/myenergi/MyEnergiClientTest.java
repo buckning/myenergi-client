@@ -78,6 +78,22 @@ class MyEnergiClientTest {
     }
 
     @Test
+    void testGetStatusWithNoChargeAddedThisSession() throws Exception {
+        when(mockEntity.getContent()).thenReturn(new ByteArrayInputStream(ZappiResponse.getExampleResponse()
+                .replace("            \"che\": 21.39,\n", "").getBytes()));
+        var response = client.getZappiStatus();
+
+        assertThat(response.getZappi()).hasSize(1);
+        var zappiResponse = response.getZappi().get(0);
+        assertThat(zappiResponse.getSerialNumber()).isEqualTo("12345678");
+        assertThat(zappiResponse.getSolarGeneration()).isEqualTo(594);
+        assertThat(zappiResponse.getChargeAddedThisSessionKwh()).isEqualTo(0.0);
+        assertThat(zappiResponse.getEvConnectionStatus()).isEqualTo("A");
+        assertThat(zappiResponse.getZappiChargeMode()).isEqualTo(3);
+        assertThat(zappiResponse.getChargeStatus()).isEqualTo(ChargeStatus.PAUSED.ordinal());
+    }
+
+    @Test
     void testBoostModeThrowsInvalidRequestExceptionWhenMinuteIsNotDivisibleBy15() throws Exception {
         when(mockEntity.getContent()).thenReturn(new ByteArrayInputStream(ZappiResponse.getErrorResponse().getBytes()));
         var endTime = LocalTime.now().withMinute(3);
