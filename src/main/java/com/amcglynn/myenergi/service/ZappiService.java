@@ -2,20 +2,27 @@ package com.amcglynn.myenergi.service;
 
 import com.amcglynn.myenergi.MyEnergiClient;
 import com.amcglynn.myenergi.ZappiChargeMode;
+import com.amcglynn.myenergi.ZappiDaySummary;
+import com.amcglynn.myenergi.ZappiMonthSummary;
 import com.amcglynn.myenergi.ZappiStatusSummary;
 import com.amcglynn.myenergi.units.KiloWattHour;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Year;
+import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class ZappiService {
 
     private final MyEnergiClient client;
     private final Supplier<LocalTime> localTimeSupplier;
+    private ZappiServiceNotificationListener listener;
 
     public ZappiService() {
         var apiKey = System.getenv("myEnergiHubApiKey");
@@ -54,8 +61,31 @@ public class ZappiService {
         return boostEndTime;
     }
 
+    public void registerNotificationListener(ZappiServiceNotificationListener listener) {
+        this.listener = listener;
+    }
+
     public void stopBoost() {
         client.stopBoost();
+    }
+
+    public ZappiDaySummary getEnergyUsage(LocalDate localDate) {
+        return new ZappiDaySummary(client.getZappiHistory(localDate).getReadings());
+    }
+
+    public ZappiMonthSummary getEnergyUsage(YearMonth yearMonth) {
+        var result = IntStream.range(1, yearMonth.lengthOfMonth() + 1)
+                .mapToObj(day -> {
+                    listener.notify(day, yearMonth.lengthOfMonth() + 1);
+                    return client.getZappiHistory(LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), day));
+                })
+                .map(dayHistory -> new ZappiDaySummary(dayHistory.getReadings()))
+                .collect(Collectors.toList());
+        return new ZappiMonthSummary(yearMonth, result);
+    }
+
+    public void getEnergyUsage(Year year) {
+
     }
 
     private LocalTime roundToNearest15Mins(Duration duration) {

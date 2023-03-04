@@ -15,6 +15,14 @@ public class KiloWattHour {
         this.value = value;
     }
 
+    public KiloWattHour(KiloWattHour other) {
+        this(other.value);
+    }
+
+    public KiloWattHour add(KiloWattHour other) {
+        return new KiloWattHour(value + other.value);
+    }
+
     public double getDouble() {
         return value;
     }

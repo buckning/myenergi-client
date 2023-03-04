@@ -71,6 +71,7 @@ by saying the following.
 3. Under the **Alexa Simulator** type the following command: **Ask my zappi to switch to solar**
 
 # TODO
+* Add usage for a requested month / year
 * Add optional linear interpolation for when data points are missing
 * Unlock charger for immediate charging
 * Set and read Zappi Boost times

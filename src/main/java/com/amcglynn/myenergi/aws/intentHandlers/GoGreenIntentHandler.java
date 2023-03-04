@@ -14,11 +14,7 @@ public class GoGreenIntentHandler implements RequestHandler {
 
     private final ZappiService zappiService;
 
-    public GoGreenIntentHandler() {
-        this.zappiService = new ZappiService();
-    }
-
-    protected GoGreenIntentHandler(ZappiService zappiService) {
+    public GoGreenIntentHandler(ZappiService zappiService) {
         this.zappiService = zappiService;
     }
 
@@ -33,7 +29,7 @@ public class GoGreenIntentHandler implements RequestHandler {
         var result = "Changed charging mode to Eco+. This may take a few minutes.";
         return handlerInput.getResponseBuilder()
                 .withSpeech(result)
-                .withSimpleCard("Charging...", result)
+                .withSimpleCard("My Zappi", result)
                 .build();
     }
 }

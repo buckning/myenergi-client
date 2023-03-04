@@ -17,8 +17,8 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
-import static com.amcglynn.myenergi.aws.intentHandlers.ResponseVerifier.verifySimpleCardInResponse;
-import static com.amcglynn.myenergi.aws.intentHandlers.ResponseVerifier.verifySpeechInResponse;
+import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySimpleCardInResponse;
+import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySpeechInResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -97,7 +97,7 @@ class StartBoostIntentHandlerTest {
         var result = handler.handle(handlerInputBuilder().build());
         assertThat(result).isPresent();
         verifySpeechInResponse(result.get(), "<speak>Sorry, I didn't understand that</speak>");
-        verifySimpleCardInResponse(result.get(), "Sorry", "Sorry, I didn't understand that");
+        verifySimpleCardInResponse(result.get(), "My Zappi", "Sorry, I didn't understand that");
     }
 
     private HandlerInput.Builder handlerInputBuilder() {

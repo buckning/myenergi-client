@@ -12,8 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.amcglynn.myenergi.aws.intentHandlers.ResponseVerifier.verifySimpleCardInResponse;
-import static com.amcglynn.myenergi.aws.intentHandlers.ResponseVerifier.verifySpeechInResponse;
+import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySimpleCardInResponse;
+import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySpeechInResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
@@ -53,7 +53,7 @@ class GoGreenIntentHandlerTest {
         assertThat(result).isPresent();
 
         verifySpeechInResponse(result.get(), "<speak>Changed charging mode to Eco+. This may take a few minutes.</speak>");
-        verifySimpleCardInResponse(result.get(), "Charging...", "Changed charging mode to Eco+. This may take a few minutes.");
+        verifySimpleCardInResponse(result.get(), "My Zappi", "Changed charging mode to Eco+. This may take a few minutes.");
 
         verify(mockZappiService).setChargeMode(ZappiChargeMode.ECO_PLUS);
     }

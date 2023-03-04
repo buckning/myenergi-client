@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.amcglynn.myenergi.aws.intentHandlers.ResponseVerifier.verifySimpleCardInResponse;
-import static com.amcglynn.myenergi.aws.intentHandlers.ResponseVerifier.verifySpeechInResponse;
+import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySimpleCardInResponse;
+import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySpeechInResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,7 +49,7 @@ class LaunchHandlerTest {
 
         verifySpeechInResponse(result.get(), "<speak>Hi, I can change your charge type and provide you energy" +
                 " usage. Ask me to start charging or to switch to solar. You can also ask me for an energy summary.</speak>");
-        verifySimpleCardInResponse(result.get(), "Greetings!", "I can change your charge " +
+        verifySimpleCardInResponse(result.get(), "My Zappi", "I can change your charge " +
                 "type and provide you energy usage. Ask me to start charging or to switch to solar. You can also ask " +
                 "me for an energy summary.");
     }

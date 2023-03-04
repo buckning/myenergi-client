@@ -25,18 +25,15 @@ public class ZappiDaySummary {
         var importedJoules = new Joule();
         var evBoostJoules = new Joule();
         var evDivertedJoules = new Joule();
-        var evTotalJoules = new Joule();
 
         detectMissingDataPoints(dataPoints);
 
         for (var dp : dataPoints) {
-            solarGenerationJoules.add(dp.getSolarGeneration());
-            evBoostJoules.add(dp.getBoost());
-            evDivertedJoules.add(dp.getZappiDiverted());
-            evTotalJoules.add(dp.getZappiDiverted());
-            evTotalJoules.add(dp.getBoost());
-            exportedJoules.add(dp.getGridExport());
-            importedJoules.add(dp.getImported());
+            solarGenerationJoules = solarGenerationJoules.add(dp.getSolarGeneration());
+            evBoostJoules = evBoostJoules.add(dp.getBoost());
+            evDivertedJoules = evDivertedJoules.add(dp.getZappiDiverted());
+            exportedJoules = exportedJoules.add(dp.getGridExport());
+            importedJoules = importedJoules.add(dp.getImported());
             sampleSize++;
         }
 
@@ -44,9 +41,10 @@ public class ZappiDaySummary {
         this.exported = new KiloWattHour(exportedJoules);
         this.imported = new KiloWattHour(importedJoules);
         this.consumed = new KiloWattHour(solarGenerationJoules.add(importedJoules).subtract(exportedJoules));
-        this.evSummary = new EvSummary(new KiloWattHour(evBoostJoules),
+        this.evSummary = new EvSummary(
                 new KiloWattHour(evDivertedJoules),
-                new KiloWattHour(evTotalJoules));
+                new KiloWattHour(evBoostJoules),
+                new KiloWattHour(evBoostJoules.add(evDivertedJoules)));
     }
 
     @AllArgsConstructor
@@ -55,19 +53,15 @@ public class ZappiDaySummary {
         private KiloWattHour boost;
         private KiloWattHour total;
 
-        public double getDiverted() {
-            return this.diverted.getDouble();
+        public KiloWattHour getDiverted() {
+            return this.diverted;
         }
 
-        public double getBoost() {
-            return this.boost.getDouble();
+        public KiloWattHour getBoost() {
+            return this.boost;
         }
 
-        public double getTotal() {
-            return this.total.getDouble();
-        }
-
-        public KiloWattHour getTotalKwH() {
+        public KiloWattHour getTotal() {
             return this.total;
         }
     }

@@ -17,10 +17,6 @@ import static com.amazon.ask.request.Predicates.intentName;
 public class ZappiSummaryIntentHandler implements RequestHandler {
     private final ZappiService zappiService;
 
-    public ZappiSummaryIntentHandler() {
-        this(new ZappiService());
-    }
-
     public ZappiSummaryIntentHandler(ZappiService zappiService) {
         this.zappiService = zappiService;
     }
@@ -41,7 +37,7 @@ public class ZappiSummaryIntentHandler implements RequestHandler {
         var summary = zappiService.getStatusSummary().get(0);
         return handlerInput.getResponseBuilder()
                 .withSpeech(new ZappiStatusSummaryVoiceResponse(summary).toString())
-                .withSimpleCard("Zappi Summary", new ZappiStatusSummaryCardResponse(summary).toString())
+                .withSimpleCard("My Zappi", new ZappiStatusSummaryCardResponse(summary).toString())
                 .build();
     }
 }

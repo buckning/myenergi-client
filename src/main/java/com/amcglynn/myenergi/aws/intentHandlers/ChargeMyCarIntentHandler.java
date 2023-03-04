@@ -14,11 +14,7 @@ public class ChargeMyCarIntentHandler implements RequestHandler {
 
     private final ZappiService zappiService;
 
-    public ChargeMyCarIntentHandler() {
-        this.zappiService = new ZappiService();
-    }
-
-    protected ChargeMyCarIntentHandler(ZappiService zappiService) {
+    public ChargeMyCarIntentHandler(ZappiService zappiService) {
         this.zappiService = zappiService;
     }
 
@@ -33,7 +29,7 @@ public class ChargeMyCarIntentHandler implements RequestHandler {
         String result = "Changed charging mode to fast. This may take a few minutes.";
         return handlerInput.getResponseBuilder()
                 .withSpeech(result)
-                .withSimpleCard("Charging...", result)
+                .withSimpleCard("My Zappi", result)
                 .build();
     }
 }
