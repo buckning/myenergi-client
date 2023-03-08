@@ -58,12 +58,23 @@ by saying the following.
 10. Navigate back to the Alexa console and to the Endpoint section. Paste the Function ARN from the previous step into the Default Region text box and click **Save Endpoints**
 
 ## Build this project and upload to Lambda
+### Upload directly from UI
 1. Build this project by running the following Maven command: `mvn clean package`
 2. In the AWS console under the Lambda settings in the previous section, click on the **Code** tab, click on the **Upload from** dropdown
 3. Click on the **.zip or .jar file** option from the dropdown
 4. Click on the **Upload** button on the pop up
 5. Navigate to the **target** directory of this project and select **myenergi-client-0.0.1-SNAPSHOT.jar** and click save
 6. Click on the **Edit** button under the Lambda **Runtime settings**. Ensure Java 11 is selected and then change the **Handler** to *com.amcglynn.myenergi.aws.MySkillStreamHandler::handleRequest*, then click **Save**
+
+### Upload to S3
+1. Log in to S3 - https://s3.console.aws.amazon.com/
+1.a. Click **Create bucket**. This step just needs to be done once
+1.b. Name the bucket, select the region where your lambda is configured and then use all defaults and click **Create bucket**. This step just needs to be done once
+2. Next select the bucket that was just created on the list
+3. Click upload, select the jar file from your file system and click **Upload**
+4. Click on the file that was just uploaded
+5. Copy the S3 URI. This needs to be used in the lambda configuration
+6. Navigate back to Lambda, click on the **Code** tab, click on **Amazon S3 location** and enter the S3 URI from the previous step into the text box and click save
 
 ## Test the Alexa Skill through the Alexa console
 1. Click on the **Test** tab in the Alexa console
