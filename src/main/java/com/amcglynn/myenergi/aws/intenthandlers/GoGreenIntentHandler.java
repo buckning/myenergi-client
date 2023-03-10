@@ -4,6 +4,7 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
 import com.amcglynn.myenergi.ZappiChargeMode;
+import com.amcglynn.myenergi.aws.MyZappi;
 import com.amcglynn.myenergi.service.ZappiService;
 
 import java.util.Optional;
@@ -29,7 +30,7 @@ public class GoGreenIntentHandler implements RequestHandler {
         var result = "Changed charging mode to Eco+. This may take a few minutes.";
         return handlerInput.getResponseBuilder()
                 .withSpeech(result)
-                .withSimpleCard("My Zappi", result)
+                .withSimpleCard(MyZappi.TITLE, result)
                 .build();
     }
 }

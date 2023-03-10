@@ -4,6 +4,7 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
 import com.amazon.ask.request.RequestHelper;
+import com.amcglynn.myenergi.aws.MyZappi;
 import com.amcglynn.myenergi.service.ZappiService;
 import com.amcglynn.myenergi.units.KiloWattHour;
 
@@ -57,7 +58,7 @@ public class StartBoostIntentHandler implements RequestHandler {
     private Optional<Response> buildNotFoundResponse(HandlerInput handlerInput) {
         return handlerInput.getResponseBuilder()
                 .withSpeech("Sorry, I didn't understand that")
-                .withSimpleCard("My Zappi", "Sorry, I didn't understand that")
+                .withSimpleCard(MyZappi.TITLE, "Sorry, I didn't understand that")
                 .build();
     }
 

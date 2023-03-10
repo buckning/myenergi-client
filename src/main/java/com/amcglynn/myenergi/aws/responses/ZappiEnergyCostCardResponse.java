@@ -5,8 +5,9 @@ import java.time.LocalDate;
 public class ZappiEnergyCostCardResponse {
     private String response;
 
-    public ZappiEnergyCostCardResponse(LocalDate date, double cost) {
-        response = "Import cost: €" + String.format("%.2f", cost) + "\n";
+    public ZappiEnergyCostCardResponse(LocalDate date, double importCost, double exportCost) {
+        response = "Import cost: €" + String.format("%.2f", importCost) + "\n";
+        response += "Export cost: €" + String.format("%.2f", exportCost) + "\n";
         response += "Date: " + date;
     }
 

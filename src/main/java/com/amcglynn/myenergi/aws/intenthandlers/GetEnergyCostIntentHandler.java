@@ -4,6 +4,7 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
 import com.amazon.ask.request.RequestHelper;
+import com.amcglynn.myenergi.aws.MyZappi;
 import com.amcglynn.myenergi.aws.exception.InvalidDateException;
 import com.amcglynn.myenergi.aws.responses.ZappiEnergyCostCardResponse;
 import com.amcglynn.myenergi.aws.responses.ZappiEnergyCostVoiceResponse;
@@ -38,14 +39,14 @@ public class GetEnergyCostIntentHandler implements RequestHandler {
             } catch (InvalidDateException e) {
                 return handlerInput.getResponseBuilder()
                         .withSpeech("You cannot request energy cost for a time in the future.")
-                        .withSimpleCard("My Zappi",
+                        .withSimpleCard(MyZappi.TITLE,
                                 "You cannot request energy cost for a time in the future.")
                         .build();
             }
         }
         return handlerInput.getResponseBuilder()
                 .withSpeech("Please ask me for energy cost for a specific day")
-                .withSimpleCard("My Zappi",
+                .withSimpleCard(MyZappi.TITLE,
                         "Please ask me for energy cost for a specific day.")
                 .build();
     }
@@ -55,14 +56,15 @@ public class GetEnergyCostIntentHandler implements RequestHandler {
         var localDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
         validate(localDate);
         var history = zappiService.getHourlySummary(localDate);
-        var cost = history.stream().mapToDouble(ImportedEnergyHourSummary::getCost).sum();
+        var importCost = history.stream().mapToDouble(ImportedEnergyHourSummary::getImportCost).sum();
+        var exportCost = history.stream().mapToDouble(ImportedEnergyHourSummary::getExportCost).sum();
 
-        var voiceResponse = new ZappiEnergyCostVoiceResponse(localDate, cost).toString();
-        var cardResponse = new ZappiEnergyCostCardResponse(localDate, cost).toString();
+        var voiceResponse = new ZappiEnergyCostVoiceResponse(localDate, importCost, exportCost).toString();
+        var cardResponse = new ZappiEnergyCostCardResponse(localDate, importCost, exportCost).toString();
 
         return handlerInput.getResponseBuilder()
                 .withSpeech(voiceResponse)
-                .withSimpleCard("My Zappi",
+                .withSimpleCard(MyZappi.TITLE,
                         cardResponse)
                 .build();
     }

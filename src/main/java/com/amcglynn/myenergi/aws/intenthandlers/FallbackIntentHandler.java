@@ -3,6 +3,7 @@ package com.amcglynn.myenergi.aws.intenthandlers;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
+import com.amcglynn.myenergi.aws.MyZappi;
 
 import java.util.Optional;
 
@@ -19,7 +20,7 @@ public class FallbackIntentHandler implements RequestHandler {
     public Optional<Response> handle(HandlerInput handlerInput) {
         return handlerInput.getResponseBuilder()
                 .withSpeech("Sorry, I don't know how to handle that. Please try again.")
-                .withSimpleCard("My Zappi", "Sorry, I don't know how to handle that. Please try again.")
+                .withSimpleCard(MyZappi.TITLE, "Sorry, I don't know how to handle that. Please try again.")
                 .build();
     }
 }

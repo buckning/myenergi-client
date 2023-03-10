@@ -14,11 +14,11 @@ public class DayTariffs {
 
     public DayTariffs() {
         tariffs = new ArrayList<>();
-        tariffs.add(new Tariff(Tariff.Type.NIGHT, 0, 8, 0.2092));
-        tariffs.add(new Tariff(Tariff.Type.DAY, 8, 17, 0.4241));
-        tariffs.add(new Tariff(Tariff.Type.PEAK, 17, 19, 0.4241));
-        tariffs.add(new Tariff(Tariff.Type.DAY, 19, 23, 0.4241));
-        tariffs.add(new Tariff(Tariff.Type.NIGHT, 23, 24, 0.2092));
+        tariffs.add(new Tariff(Tariff.Type.NIGHT, 0, 8, 0.2092, 0.21));
+        tariffs.add(new Tariff(Tariff.Type.DAY, 8, 17, 0.4241, 0.21));
+        tariffs.add(new Tariff(Tariff.Type.PEAK, 17, 19, 0.4241, 0.21));
+        tariffs.add(new Tariff(Tariff.Type.DAY, 19, 23, 0.4241, 0.21));
+        tariffs.add(new Tariff(Tariff.Type.NIGHT, 23, 24, 0.2092, 0.21));
 
         hourlyTariffs = new HashMap<>();
         buildHourlyTariffMap();

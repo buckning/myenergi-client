@@ -14,15 +14,19 @@ public class Tariff {
     private final int startTime;
     @Getter
     private final int endTime;
-    @Getter final Type type;
     @Getter
-    private final double costPerKwh;
+    private final Type type;
+    @Getter
+    private final double importCostPerKwh;
+    @Getter
+    private final double exportCostPerKwh;
 
 
     // build ranges instead of start and end time
-    public Tariff(Type type, int startTime, int endTime, double costPerKwh) {
+    public Tariff(Type type, int startTime, int endTime, double importCostPerKwh, double exportCostPerKwh) {
         this.type = type;
-        this.costPerKwh = costPerKwh;
+        this.importCostPerKwh = importCostPerKwh;
+        this.exportCostPerKwh = exportCostPerKwh;
         this.startTime = startTime;
         this.endTime = endTime;
     }

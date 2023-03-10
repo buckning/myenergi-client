@@ -5,6 +5,7 @@ import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.Response;
 import com.amcglynn.myenergi.aws.AlexaZappiChargeModeMapper;
+import com.amcglynn.myenergi.aws.MyZappi;
 import com.amcglynn.myenergi.service.ZappiService;
 
 import java.util.Optional;
@@ -37,7 +38,7 @@ public class SetChargeModeIntentHandler implements RequestHandler {
         zappiService.setChargeMode(chargeMode);
         return handlerInput.getResponseBuilder()
                 .withSpeech("Changed charging mode to " + chargeMode.getDisplayName() + ". This may take a few minutes.")
-                .withSimpleCard("My Zappi", "Changed charging mode to "
+                .withSimpleCard(MyZappi.TITLE, "Changed charging mode to "
                         + chargeMode.getDisplayName() + ". This may take a few minutes.")
                 .build();
     }

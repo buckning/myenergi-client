@@ -4,6 +4,7 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.impl.LaunchRequestHandler;
 import com.amazon.ask.model.LaunchRequest;
 import com.amazon.ask.model.Response;
+import com.amcglynn.myenergi.aws.MyZappi;
 
 import java.util.Optional;
 
@@ -21,7 +22,7 @@ public class LaunchHandler implements LaunchRequestHandler {
                 .withSpeech("Hi, I can change your charge type and provide you energy usage. " +
                         "Ask me to start charging or to switch to solar. " +
                         "You can also ask me for an energy summary.")
-                .withSimpleCard("My Zappi", "I can change your charge type and provide you energy usage. " +
+                .withSimpleCard(MyZappi.TITLE, "I can change your charge type and provide you energy usage. " +
                         "Ask me to start charging or to switch to solar. You can also ask me for an energy summary.")
                 .build();
     }
