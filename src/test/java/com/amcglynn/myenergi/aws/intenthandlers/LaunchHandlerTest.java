@@ -1,36 +1,30 @@
-package com.amcglynn.myenergi.aws.intentHandlers;
+package com.amcglynn.myenergi.aws.intenthandlers;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
+import com.amazon.ask.model.LaunchRequest;
 import com.amazon.ask.model.RequestEnvelope;
-import com.amcglynn.myenergi.ZappiChargeMode;
-import com.amcglynn.myenergi.service.ZappiService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySimpleCardInResponse;
 import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySpeechInResponse;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class ChargeMyCarIntentHandlerTest {
+class LaunchHandlerTest {
 
-    @Mock
-    private ZappiService mockZappiService;
-    private IntentRequest intentRequest;
+    private LaunchRequest launchRequest;
 
-    private ChargeMyCarIntentHandler handler;
+    private LaunchHandler handler;
 
     @BeforeEach
     void setUp() {
-        handler = new ChargeMyCarIntentHandler(mockZappiService);
-        intentRequest = IntentRequest.builder()
-                .withIntent(Intent.builder().withName("ChargeMyCar").build())
+        handler = new LaunchHandler();
+        launchRequest = LaunchRequest.builder()
                 .build();
     }
 
@@ -41,10 +35,11 @@ class ChargeMyCarIntentHandlerTest {
 
     @Test
     void testCanHandleReturnsFalseWhenNotTheCorrectIntent() {
-        intentRequest = IntentRequest.builder()
-                .withIntent(Intent.builder().withName("SetChargeMode").build())
-                .build();
-        assertThat(handler.canHandle(handlerInputBuilder().build())).isFalse();
+        var intentRequest = IntentRequest.builder()
+                .withIntent(Intent.builder().withName("SetChargeMode").build()).build();
+        var requestEnvelope = RequestEnvelope.builder().withRequest(intentRequest).build();
+        var handlerInput = HandlerInput.builder().withRequestEnvelope(requestEnvelope).build();
+        assertThat(handler.canHandle(handlerInput)).isFalse();
     }
 
     @Test
@@ -52,10 +47,11 @@ class ChargeMyCarIntentHandlerTest {
         var result = handler.handle(handlerInputBuilder().build());
         assertThat(result).isPresent();
 
-        verifySpeechInResponse(result.get(), "<speak>Changed charging mode to fast. This may take a few minutes.</speak>");
-        verifySimpleCardInResponse(result.get(), "My Zappi", "Changed charging mode to fast. This may take a few minutes.");
-
-        verify(mockZappiService).setChargeMode(ZappiChargeMode.FAST);
+        verifySpeechInResponse(result.get(), "<speak>Hi, I can change your charge type and provide you energy" +
+                " usage. Ask me to start charging or to switch to solar. You can also ask me for an energy summary.</speak>");
+        verifySimpleCardInResponse(result.get(), "My Zappi", "I can change your charge " +
+                "type and provide you energy usage. Ask me to start charging or to switch to solar. You can also ask " +
+                "me for an energy summary.");
     }
 
     private HandlerInput.Builder handlerInputBuilder() {
@@ -65,6 +61,6 @@ class ChargeMyCarIntentHandlerTest {
 
     private RequestEnvelope.Builder requestEnvelopeBuilder() {
         return RequestEnvelope.builder()
-                .withRequest(intentRequest);
+                .withRequest(launchRequest);
     }
 }

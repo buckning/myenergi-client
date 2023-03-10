@@ -1,11 +1,10 @@
-package com.amcglynn.myenergi.aws.intentHandlers;
+package com.amcglynn.myenergi.aws.intenthandlers;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.RequestEnvelope;
 import com.amazon.ask.model.Slot;
-import com.amcglynn.myenergi.ZappiChargeMode;
 import com.amcglynn.myenergi.ZappiDaySummary;
 import com.amcglynn.myenergi.ZappiMonthSummary;
 import com.amcglynn.myenergi.service.ZappiService;
@@ -19,7 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
 
 import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySimpleCardInResponse;
 import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySpeechInResponse;

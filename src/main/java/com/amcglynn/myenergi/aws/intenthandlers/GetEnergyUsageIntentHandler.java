@@ -1,4 +1,4 @@
-package com.amcglynn.myenergi.aws.intentHandlers;
+package com.amcglynn.myenergi.aws.intenthandlers;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
@@ -7,7 +7,6 @@ import com.amazon.ask.model.services.directive.Header;
 import com.amazon.ask.model.services.directive.SendDirectiveRequest;
 import com.amazon.ask.model.services.directive.SpeakDirective;
 import com.amazon.ask.request.RequestHelper;
-import com.amcglynn.myenergi.ZappiChargeMode;
 import com.amcglynn.myenergi.aws.exception.InvalidDateException;
 import com.amcglynn.myenergi.aws.responses.ZappiDaySummaryCardResponse;
 import com.amcglynn.myenergi.aws.responses.ZappiDaySummaryVoiceResponse;

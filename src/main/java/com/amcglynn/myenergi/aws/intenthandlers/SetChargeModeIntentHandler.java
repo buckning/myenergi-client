@@ -1,4 +1,4 @@
-package com.amcglynn.myenergi.aws.intentHandlers;
+package com.amcglynn.myenergi.aws.intenthandlers;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;

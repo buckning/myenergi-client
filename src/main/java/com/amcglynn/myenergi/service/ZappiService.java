@@ -5,6 +5,7 @@ import com.amcglynn.myenergi.ZappiChargeMode;
 import com.amcglynn.myenergi.ZappiDaySummary;
 import com.amcglynn.myenergi.ZappiMonthSummary;
 import com.amcglynn.myenergi.ZappiStatusSummary;
+import com.amcglynn.myenergi.energycost.ImportedEnergyHourSummary;
 import com.amcglynn.myenergi.units.KiloWattHour;
 
 import java.time.Duration;
@@ -86,6 +87,12 @@ public class ZappiService {
 
     public void getEnergyUsage(Year year) {
 
+    }
+
+    public List<ImportedEnergyHourSummary> getHourlySummary(LocalDate date) {
+        return client.getZappiHourlyHistory(date).getReadings().stream()
+                .map(ImportedEnergyHourSummary::new)
+                .collect(Collectors.toList());
     }
 
     private LocalTime roundToNearest15Mins(Duration duration) {

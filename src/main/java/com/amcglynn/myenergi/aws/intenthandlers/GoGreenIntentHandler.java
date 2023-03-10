@@ -1,4 +1,4 @@
-package com.amcglynn.myenergi.aws.intentHandlers;
+package com.amcglynn.myenergi.aws.intenthandlers;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
@@ -10,25 +10,26 @@ import java.util.Optional;
 
 import static com.amazon.ask.request.Predicates.intentName;
 
-public class StopBoostIntentHandler implements RequestHandler {
+public class GoGreenIntentHandler implements RequestHandler {
 
     private final ZappiService zappiService;
 
-    public StopBoostIntentHandler(ZappiService zappiService) {
+    public GoGreenIntentHandler(ZappiService zappiService) {
         this.zappiService = zappiService;
     }
 
     @Override
     public boolean canHandle(HandlerInput handlerInput) {
-        return handlerInput.matches(intentName("StopBoostMode"));
+        return handlerInput.matches(intentName("GoGreen"));
     }
 
     @Override
     public Optional<Response> handle(HandlerInput handlerInput) {
-        zappiService.stopBoost();
+        zappiService.setChargeMode(ZappiChargeMode.ECO_PLUS);
+        var result = "Changed charging mode to Eco+. This may take a few minutes.";
         return handlerInput.getResponseBuilder()
-                .withSpeech("Stopping boost mode now.")
-                .withSimpleCard("My Zappi", "Stopping boost mode now.")
+                .withSpeech(result)
+                .withSimpleCard("My Zappi", result)
                 .build();
     }
 }

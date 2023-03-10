@@ -9,14 +9,18 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * I forgot to register some intent handlers before and wasted time figuring out what's wrong. The purpose of this test
+ * is to prevent that from happening again.
+ */
 class MySkillStreamHandlerTest {
 
     @Test
     void testAllIntentHandlersAreRegistered() throws Exception {
-        var filesInPackage = getClassNamesInPackage("com.amcglynn.myenergi.aws.intentHandlers")
+        var filesInPackage = getClassNamesInPackage("com.amcglynn.myenergi.aws.intenthandlers")
                 .stream().filter(file -> !file.endsWith("Test")).collect(Collectors.toList());
         assertThat(filesInPackage).describedAs("Make sure to register your new RequestHandler in " +
-                "MySkillStreamHandler and then change this count manually in this test once it is done").hasSize(9);
+                "MySkillStreamHandler and then change this count manually in this test once it is done").hasSize(10);
     }
 
     public List<String> getClassNamesInPackage(String packageName) throws IOException {

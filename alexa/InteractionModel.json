@@ -114,6 +114,42 @@
             "Boost until {Time}",
             "Boost for {Duration}"
           ]
+        },
+        {
+          "name": "GetEnergyUsage",
+          "slots": [
+            {
+              "name": "month",
+              "type": "AMAZON.Month"
+            },
+            {
+              "name": "year",
+              "type": "AMAZON.FOUR_DIGIT_NUMBER"
+            },
+            {
+              "name": "date",
+              "type": "AMAZON.DATE"
+            }
+          ],
+          "samples": [
+            "Calculate energy usage for {date}",
+            "Get usage for {date}",
+            "What's my usage for {date} "
+          ]
+        },
+        {
+          "name": "GetEnergyCost",
+          "slots": [
+            {
+              "name": "date",
+              "type": "AMAZON.DATE"
+            }
+          ],
+          "samples": [
+            "What was the cost for {date}",
+            "Give me an energy cost for {date}",
+            "How much did the electricity cost me for {date}"
+          ]
         }
       ],
       "types": [
