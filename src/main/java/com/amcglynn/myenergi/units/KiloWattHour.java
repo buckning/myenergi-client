@@ -23,6 +23,10 @@ public class KiloWattHour {
         return new KiloWattHour(value + other.value);
     }
 
+    public KiloWattHour minus(KiloWattHour other) {
+        return new KiloWattHour(value - other.value);
+    }
+
     public double getDouble() {
         return value;
     }

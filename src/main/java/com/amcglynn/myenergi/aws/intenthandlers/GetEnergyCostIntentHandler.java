@@ -58,9 +58,10 @@ public class GetEnergyCostIntentHandler implements RequestHandler {
         var history = zappiService.getHourlySummary(localDate);
         var importCost = history.stream().mapToDouble(ImportedEnergyHourSummary::getImportCost).sum();
         var exportCost = history.stream().mapToDouble(ImportedEnergyHourSummary::getExportCost).sum();
+        var solarSavings = history.stream().mapToDouble(ImportedEnergyHourSummary::getSolarSavings).sum();
 
-        var voiceResponse = new ZappiEnergyCostVoiceResponse(localDate, importCost, exportCost).toString();
-        var cardResponse = new ZappiEnergyCostCardResponse(localDate, importCost, exportCost).toString();
+        var voiceResponse = new ZappiEnergyCostVoiceResponse(localDate, importCost, exportCost, solarSavings).toString();
+        var cardResponse = new ZappiEnergyCostCardResponse(localDate, importCost, exportCost, solarSavings).toString();
 
         return handlerInput.getResponseBuilder()
                 .withSpeech(voiceResponse)

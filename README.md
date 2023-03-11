@@ -90,4 +90,4 @@ by saying the following.
 * Integrate Alexa Settings APIs
 * Alexa Presentation Language (APL)
 * Add to flash briefing
-* Get breakdown of energy usage by electricity rate. e.g. day rate, night rate and peak rate
+* Get cost of charging the car
