@@ -1,4 +1,4 @@
-package com.amcglynn.myenergi.aws.intentHandlers;
+package com.amcglynn.myenergi.aws.intenthandlers;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Intent;
@@ -18,29 +18,29 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class GoGreenIntentHandlerTest {
+class ChargeMyCarIntentHandlerTest {
 
     @Mock
     private ZappiService mockZappiService;
     private IntentRequest intentRequest;
 
-    private GoGreenIntentHandler handler;
+    private ChargeMyCarIntentHandler handler;
 
     @BeforeEach
     void setUp() {
-        handler = new GoGreenIntentHandler(mockZappiService);
+        handler = new ChargeMyCarIntentHandler(mockZappiService);
         intentRequest = IntentRequest.builder()
-                .withIntent(Intent.builder().withName("GoGreen").build())
+                .withIntent(Intent.builder().withName("ChargeMyCar").build())
                 .build();
     }
 
     @Test
-    void testCanHandleOnlyTriggersForTheGoGreenIntent() {
+    void testCanHandleOnlyTriggersForTheIntent() {
         assertThat(handler.canHandle(handlerInputBuilder().build())).isTrue();
     }
 
     @Test
-    void testCanHandleReturnsFalseWhenNotGoGreenIntent() {
+    void testCanHandleReturnsFalseWhenNotTheCorrectIntent() {
         intentRequest = IntentRequest.builder()
                 .withIntent(Intent.builder().withName("SetChargeMode").build())
                 .build();
@@ -52,10 +52,10 @@ class GoGreenIntentHandlerTest {
         var result = handler.handle(handlerInputBuilder().build());
         assertThat(result).isPresent();
 
-        verifySpeechInResponse(result.get(), "<speak>Changed charging mode to Eco+. This may take a few minutes.</speak>");
-        verifySimpleCardInResponse(result.get(), "My Zappi", "Changed charging mode to Eco+. This may take a few minutes.");
+        verifySpeechInResponse(result.get(), "<speak>Changed charging mode to fast. This may take a few minutes.</speak>");
+        verifySimpleCardInResponse(result.get(), "My Zappi", "Changed charging mode to fast. This may take a few minutes.");
 
-        verify(mockZappiService).setChargeMode(ZappiChargeMode.ECO_PLUS);
+        verify(mockZappiService).setChargeMode(ZappiChargeMode.FAST);
     }
 
     private HandlerInput.Builder handlerInputBuilder() {

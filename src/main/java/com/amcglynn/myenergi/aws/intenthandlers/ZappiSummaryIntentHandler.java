@@ -1,4 +1,4 @@
-package com.amcglynn.myenergi.aws.intentHandlers;
+package com.amcglynn.myenergi.aws.intenthandlers;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
@@ -6,6 +6,7 @@ import com.amazon.ask.model.Response;
 import com.amazon.ask.model.services.directive.Header;
 import com.amazon.ask.model.services.directive.SendDirectiveRequest;
 import com.amazon.ask.model.services.directive.SpeakDirective;
+import com.amcglynn.myenergi.aws.MyZappi;
 import com.amcglynn.myenergi.aws.responses.ZappiStatusSummaryCardResponse;
 import com.amcglynn.myenergi.aws.responses.ZappiStatusSummaryVoiceResponse;
 import com.amcglynn.myenergi.service.ZappiService;
@@ -37,7 +38,7 @@ public class ZappiSummaryIntentHandler implements RequestHandler {
         var summary = zappiService.getStatusSummary().get(0);
         return handlerInput.getResponseBuilder()
                 .withSpeech(new ZappiStatusSummaryVoiceResponse(summary).toString())
-                .withSimpleCard("My Zappi", new ZappiStatusSummaryCardResponse(summary).toString())
+                .withSimpleCard(MyZappi.TITLE, new ZappiStatusSummaryCardResponse(summary).toString())
                 .build();
     }
 }

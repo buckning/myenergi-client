@@ -1,22 +1,16 @@
-package com.amcglynn.myenergi.aws.intentHandlers;
+package com.amcglynn.myenergi.aws.intenthandlers;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.RequestEnvelope;
 import com.amazon.ask.model.Slot;
-import com.amcglynn.myenergi.ZappiChargeMode;
 import com.amcglynn.myenergi.service.ZappiService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.stream.Stream;
 
 import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySimpleCardInResponse;
 import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySpeechInResponse;
@@ -24,19 +18,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class SetChargeModeIntentHandlerTest {
+class StopBoostIntentHandlerTest {
 
     @Mock
     private ZappiService mockZappiService;
     private IntentRequest intentRequest;
 
-    private SetChargeModeIntentHandler handler;
+    private StopBoostIntentHandler handler;
 
     @BeforeEach
     void setUp() {
-        handler = new SetChargeModeIntentHandler(mockZappiService);
+        handler = new StopBoostIntentHandler(mockZappiService);
         intentRequest = IntentRequest.builder()
-                .withIntent(Intent.builder().withName("SetChargeMode").build())
+                .withIntent(Intent.builder().withName("StopBoostMode").build())
                 .build();
     }
 
@@ -48,24 +42,19 @@ class SetChargeModeIntentHandlerTest {
     @Test
     void testCanHandleReturnsFalseWhenNotTheCorrectIntent() {
         intentRequest = IntentRequest.builder()
-                .withIntent(Intent.builder().withName("GoGreen").build())
+                .withIntent(Intent.builder()
+                        .withName("SetChargeMode").build())
                 .build();
         assertThat(handler.canHandle(handlerInputBuilder().build())).isFalse();
     }
 
-    @ParameterizedTest
-    @MethodSource("zappiChargeMode")
-    void testHandle(ZappiChargeMode zappiChargeMode) {
-        initIntentRequest(zappiChargeMode);
+    @Test
+    void testHandle() {
         var result = handler.handle(handlerInputBuilder().build());
         assertThat(result).isPresent();
-
-        verifySpeechInResponse(result.get(), "<speak>Changed charging mode to "
-                + zappiChargeMode.getDisplayName() + ". This may take a few minutes.</speak>");
-        verifySimpleCardInResponse(result.get(), "My Zappi", "Changed charging mode to " +
-                        zappiChargeMode.getDisplayName() + ". This may take a few minutes.");
-
-        verify(mockZappiService).setChargeMode(zappiChargeMode);
+        verifySpeechInResponse(result.get(), "<speak>Stopping boost mode now.</speak>");
+        verifySimpleCardInResponse(result.get(), "My Zappi", "Stopping boost mode now.");
+        verify(mockZappiService).stopBoost();
     }
 
     private HandlerInput.Builder handlerInputBuilder() {
@@ -78,20 +67,11 @@ class SetChargeModeIntentHandlerTest {
                 .withRequest(intentRequest);
     }
 
-    private void initIntentRequest(ZappiChargeMode chargeMode) {
+    private void initIntentRequest(String slotName, String slotValue) {
         intentRequest = IntentRequest.builder()
                 .withIntent(Intent.builder()
-                        .putSlotsItem("ChargeMode", Slot.builder().withValue(chargeMode.getDisplayName()).build())
-                        .withName("ChargeMode").build())
+                        .putSlotsItem(slotName, Slot.builder().withValue(slotValue).build())
+                        .withName("StartBoostMode").build())
                 .build();
-    }
-
-    private static Stream<Arguments> zappiChargeMode() {
-        return Stream.of(
-                Arguments.of(ZappiChargeMode.STOP),
-                Arguments.of(ZappiChargeMode.ECO_PLUS),
-                Arguments.of(ZappiChargeMode.ECO),
-                Arguments.of(ZappiChargeMode.FAST),
-                Arguments.of(ZappiChargeMode.BOOST));
     }
 }

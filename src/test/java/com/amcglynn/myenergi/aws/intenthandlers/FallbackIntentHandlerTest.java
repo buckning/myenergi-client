@@ -1,36 +1,27 @@
-package com.amcglynn.myenergi.aws.intentHandlers;
+package com.amcglynn.myenergi.aws.intenthandlers;
 
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.RequestEnvelope;
-import com.amazon.ask.model.Slot;
-import com.amcglynn.myenergi.service.ZappiService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySimpleCardInResponse;
 import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySpeechInResponse;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
-class StopBoostIntentHandlerTest {
+class FallbackIntentHandlerTest {
 
-    @Mock
-    private ZappiService mockZappiService;
     private IntentRequest intentRequest;
 
-    private StopBoostIntentHandler handler;
+    private FallbackIntentHandler handler;
 
     @BeforeEach
     void setUp() {
-        handler = new StopBoostIntentHandler(mockZappiService);
+        handler = new FallbackIntentHandler();
         intentRequest = IntentRequest.builder()
-                .withIntent(Intent.builder().withName("StopBoostMode").build())
+                .withIntent(Intent.builder().withName("AMAZON.FallbackIntent").build())
                 .build();
     }
 
@@ -42,8 +33,7 @@ class StopBoostIntentHandlerTest {
     @Test
     void testCanHandleReturnsFalseWhenNotTheCorrectIntent() {
         intentRequest = IntentRequest.builder()
-                .withIntent(Intent.builder()
-                        .withName("SetChargeMode").build())
+                .withIntent(Intent.builder().withName("GoGreen").build())
                 .build();
         assertThat(handler.canHandle(handlerInputBuilder().build())).isFalse();
     }
@@ -52,9 +42,9 @@ class StopBoostIntentHandlerTest {
     void testHandle() {
         var result = handler.handle(handlerInputBuilder().build());
         assertThat(result).isPresent();
-        verifySpeechInResponse(result.get(), "<speak>Stopping boost mode now.</speak>");
-        verifySimpleCardInResponse(result.get(), "My Zappi", "Stopping boost mode now.");
-        verify(mockZappiService).stopBoost();
+
+        verifySpeechInResponse(result.get(), "<speak>Sorry, I don't know how to handle that. Please try again.</speak>");
+        verifySimpleCardInResponse(result.get(), "My Zappi", "Sorry, I don't know how to handle that. Please try again.");
     }
 
     private HandlerInput.Builder handlerInputBuilder() {
@@ -67,11 +57,4 @@ class StopBoostIntentHandlerTest {
                 .withRequest(intentRequest);
     }
 
-    private void initIntentRequest(String slotName, String slotValue) {
-        intentRequest = IntentRequest.builder()
-                .withIntent(Intent.builder()
-                        .putSlotsItem(slotName, Slot.builder().withValue(slotValue).build())
-                        .withName("StartBoostMode").build())
-                .build();
-    }
 }

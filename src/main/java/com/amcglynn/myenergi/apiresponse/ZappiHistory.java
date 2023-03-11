@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -14,17 +15,21 @@ import lombok.ToString;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ZappiHistory {
+    @Getter
     @JsonProperty("yr")
     private int year;
 
+    @Getter
     @JsonProperty("dom")
     private int dayOfMonth;
 
+    @Getter
     @JsonProperty("mon")
     private int month;
 
+    @Getter
     @JsonProperty("hr")
-    private int hour;
+    private Integer hour = 0;
 
     @JsonProperty("min")
     private Integer minute = 0;

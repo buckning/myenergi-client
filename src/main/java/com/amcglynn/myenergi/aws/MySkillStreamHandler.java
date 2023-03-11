@@ -2,15 +2,16 @@ package com.amcglynn.myenergi.aws;
 
 import com.amazon.ask.SkillStreamHandler;
 import com.amazon.ask.Skills;
-import com.amcglynn.myenergi.aws.intentHandlers.ChargeMyCarIntentHandler;
-import com.amcglynn.myenergi.aws.intentHandlers.FallbackIntentHandler;
-import com.amcglynn.myenergi.aws.intentHandlers.GetEnergyUsageIntentHandler;
-import com.amcglynn.myenergi.aws.intentHandlers.GoGreenIntentHandler;
-import com.amcglynn.myenergi.aws.intentHandlers.LaunchHandler;
-import com.amcglynn.myenergi.aws.intentHandlers.SetChargeModeIntentHandler;
-import com.amcglynn.myenergi.aws.intentHandlers.StartBoostIntentHandler;
-import com.amcglynn.myenergi.aws.intentHandlers.StopBoostIntentHandler;
-import com.amcglynn.myenergi.aws.intentHandlers.ZappiSummaryIntentHandler;
+import com.amcglynn.myenergi.aws.intenthandlers.ChargeMyCarIntentHandler;
+import com.amcglynn.myenergi.aws.intenthandlers.FallbackIntentHandler;
+import com.amcglynn.myenergi.aws.intenthandlers.GetEnergyCostIntentHandler;
+import com.amcglynn.myenergi.aws.intenthandlers.GetEnergyUsageIntentHandler;
+import com.amcglynn.myenergi.aws.intenthandlers.GoGreenIntentHandler;
+import com.amcglynn.myenergi.aws.intenthandlers.LaunchHandler;
+import com.amcglynn.myenergi.aws.intenthandlers.SetChargeModeIntentHandler;
+import com.amcglynn.myenergi.aws.intenthandlers.StartBoostIntentHandler;
+import com.amcglynn.myenergi.aws.intenthandlers.StopBoostIntentHandler;
+import com.amcglynn.myenergi.aws.intenthandlers.ZappiSummaryIntentHandler;
 import com.amcglynn.myenergi.service.ZappiService;
 
 public class MySkillStreamHandler extends SkillStreamHandler {
@@ -30,6 +31,7 @@ public class MySkillStreamHandler extends SkillStreamHandler {
                 .addRequestHandler(new ChargeMyCarIntentHandler(zappiService))
                 .addRequestHandler(new GoGreenIntentHandler(zappiService))
                 .addRequestHandler(new GetEnergyUsageIntentHandler(zappiService))
+                .addRequestHandler(new GetEnergyCostIntentHandler(zappiService))
                 .build());
     }
 }
