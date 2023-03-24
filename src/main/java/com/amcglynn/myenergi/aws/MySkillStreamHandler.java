@@ -22,7 +22,7 @@ public class MySkillStreamHandler extends SkillStreamHandler {
 
     public MySkillStreamHandler(ZappiService zappiService) {
         super(Skills.standard()
-                .addRequestHandler(new LaunchHandler())
+                .addRequestHandler(new LaunchHandler(zappiService))
                 .addRequestHandler(new FallbackIntentHandler())
                 .addRequestHandler(new StartBoostIntentHandler(zappiService))
                 .addRequestHandler(new ZappiSummaryIntentHandler(zappiService))

@@ -7,7 +7,8 @@ public class ZappiEnergyCostVoiceResponse {
 
     public ZappiEnergyCostVoiceResponse(LocalDate date, double importCost, double exportCost,
                                         double solarConsumptionSavings) {
-        response = "Cost for " + date + " is €" + String.format("%.2f", importCost) + ". ";
+        response = "Cost for " + date + " is €" + String.format("%.2f", importCost - exportCost) + ". ";
+        response += "You imported €" + String.format("%.2f", importCost) + ". ";
         response += "You exported €" + String.format("%.2f", exportCost) + ". ";
         response += "You saved €" + String.format("%.2f", solarConsumptionSavings) + ". ";
         response += "Total saved €" + String.format("%.2f", solarConsumptionSavings + exportCost) + ". ";
