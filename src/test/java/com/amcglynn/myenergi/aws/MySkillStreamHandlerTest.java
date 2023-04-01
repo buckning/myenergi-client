@@ -20,7 +20,7 @@ class MySkillStreamHandlerTest {
         var filesInPackage = getClassNamesInPackage("com.amcglynn.myenergi.aws.intenthandlers")
                 .stream().filter(file -> !file.endsWith("Test")).collect(Collectors.toList());
         assertThat(filesInPackage).describedAs("Make sure to register your new RequestHandler in " +
-                "MySkillStreamHandler and then change this count manually in this test once it is done").hasSize(10);
+                "MySkillStreamHandler and then change this count manually in this test once it is done").hasSize(11);
     }
 
     public List<String> getClassNamesInPackage(String packageName) throws IOException {

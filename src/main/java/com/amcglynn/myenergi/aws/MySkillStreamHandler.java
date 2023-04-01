@@ -6,6 +6,7 @@ import com.amcglynn.myenergi.aws.intenthandlers.ChargeMyCarIntentHandler;
 import com.amcglynn.myenergi.aws.intenthandlers.FallbackIntentHandler;
 import com.amcglynn.myenergi.aws.intenthandlers.GetEnergyCostIntentHandler;
 import com.amcglynn.myenergi.aws.intenthandlers.GetEnergyUsageIntentHandler;
+import com.amcglynn.myenergi.aws.intenthandlers.GetPlugStatusIntentHandler;
 import com.amcglynn.myenergi.aws.intenthandlers.GoGreenIntentHandler;
 import com.amcglynn.myenergi.aws.intenthandlers.LaunchHandler;
 import com.amcglynn.myenergi.aws.intenthandlers.SetChargeModeIntentHandler;
@@ -30,6 +31,7 @@ public class MySkillStreamHandler extends SkillStreamHandler {
                 .addRequestHandler(new SetChargeModeIntentHandler(zappiService))
                 .addRequestHandler(new ChargeMyCarIntentHandler(zappiService))
                 .addRequestHandler(new GoGreenIntentHandler(zappiService))
+                .addRequestHandler(new GetPlugStatusIntentHandler(zappiService))
                 .addRequestHandler(new GetEnergyUsageIntentHandler(zappiService))
                 .addRequestHandler(new GetEnergyCostIntentHandler(zappiService))
                 .build());
