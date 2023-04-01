@@ -150,6 +150,18 @@
             "Give me an energy cost for {date}",
             "How much did the electricity cost me for {date}"
           ]
+        },
+        {
+          "name": "GetPlugStatus",
+          "slots": [],
+          "samples": [
+            "Is my E.V. charging",
+            "Has my car finished charging",
+            "Is my car charging",
+            "Is my car connected",
+            "Is my car plugged in",
+            "Is my E.V. plugged in"
+          ]
         }
       ],
       "types": [
