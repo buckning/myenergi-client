@@ -5,6 +5,7 @@ import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
 import com.amcglynn.myenergi.ZappiChargeMode;
 import com.amcglynn.myenergi.aws.MyZappi;
+import com.amcglynn.myenergi.exception.ClientException;
 import com.amcglynn.myenergi.service.ZappiService;
 
 import java.util.Optional;
@@ -26,11 +27,19 @@ public class GoGreenIntentHandler implements RequestHandler {
 
     @Override
     public Optional<Response> handle(HandlerInput handlerInput) {
-        zappiService.setChargeMode(ZappiChargeMode.ECO_PLUS);
-        var result = "Changed charging mode to Eco+. This may take a few minutes.";
-        return handlerInput.getResponseBuilder()
-                .withSpeech(result)
-                .withSimpleCard(MyZappi.TITLE, result)
-                .build();
+        try {
+            zappiService.setChargeMode(ZappiChargeMode.ECO_PLUS);
+            var result = "Changed charging mode to Eco+. This may take a few minutes.";
+            return handlerInput.getResponseBuilder()
+                    .withSpeech(result)
+                    .withSimpleCard(MyZappi.TITLE, result)
+                    .build();
+        } catch (ClientException e) {
+            String errorMessage = "Could not authenticate with myenergi API, please check your API key and serial number";
+            return handlerInput.getResponseBuilder()
+                    .withSpeech(errorMessage)
+                    .withSimpleCard(MyZappi.TITLE, errorMessage)
+                    .build();
+        }
     }
 }

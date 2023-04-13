@@ -16,6 +16,7 @@ import com.amcglynn.myenergi.aws.responses.ZappiEvConnectionStatusCardResponse;
 import com.amcglynn.myenergi.aws.responses.ZappiEvConnectionStatusVoiceResponse;
 import com.amcglynn.myenergi.aws.responses.ZappiMonthSummaryCardResponse;
 import com.amcglynn.myenergi.aws.responses.ZappiMonthSummaryVoiceResponse;
+import com.amcglynn.myenergi.exception.ClientException;
 import com.amcglynn.myenergi.service.ZappiService;
 
 import java.time.LocalDate;
@@ -41,12 +42,20 @@ public class GetPlugStatusIntentHandler implements RequestHandler {
 
     @Override
     public Optional<Response> handle(HandlerInput handlerInput) {
-        var summary = new EvStatusSummary(zappiService.getStatusSummary().get(0));
+        try {
+            var summary = new EvStatusSummary(zappiService.getStatusSummary().get(0));
 
-        return handlerInput.getResponseBuilder()
-                .withSpeech(new ZappiEvConnectionStatusVoiceResponse(summary).toString())
-                .withSimpleCard(MyZappi.TITLE,
-                        new ZappiEvConnectionStatusCardResponse(summary).toString())
-                .build();
+            return handlerInput.getResponseBuilder()
+                    .withSpeech(new ZappiEvConnectionStatusVoiceResponse(summary).toString())
+                    .withSimpleCard(MyZappi.TITLE,
+                            new ZappiEvConnectionStatusCardResponse(summary).toString())
+                    .build();
+        } catch (ClientException e) {
+            String errorMessage = "Could not authenticate with myenergi API, please check your API key and serial number";
+            return handlerInput.getResponseBuilder()
+                    .withSpeech(errorMessage)
+                    .withSimpleCard(MyZappi.TITLE, errorMessage)
+                    .build();
+        }
     }
 }

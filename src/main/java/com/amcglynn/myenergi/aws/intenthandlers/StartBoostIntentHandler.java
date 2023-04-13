@@ -5,6 +5,7 @@ import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
 import com.amazon.ask.request.RequestHelper;
 import com.amcglynn.myenergi.aws.MyZappi;
+import com.amcglynn.myenergi.exception.ClientException;
 import com.amcglynn.myenergi.service.ZappiService;
 import com.amcglynn.myenergi.units.KiloWattHour;
 
@@ -33,23 +34,30 @@ public class StartBoostIntentHandler implements RequestHandler {
         var duration = parseDurationSlot(handlerInput);
         var time = parseSlot(handlerInput, "Time");
         var kilowattHours = parseKiloWattHourSlot(handlerInput);
+        try {
+            if (kilowattHours.isPresent()) {
+                zappiService.startBoost(kilowattHours.get());
+                return buildResponse(handlerInput, kilowattHours.get());
+            }
 
-        if (kilowattHours.isPresent()) {
-            zappiService.startBoost(kilowattHours.get());
-            return buildResponse(handlerInput, kilowattHours.get());
-        }
+            if (time.isPresent()) {
+                var localTime = LocalTime.parse(time.get());
+                zappiService.startSmartBoost(localTime);
+                return buildResponse(handlerInput, localTime);
+            }
 
-        if (time.isPresent()) {
-            var localTime = LocalTime.parse(time.get());
-            zappiService.startSmartBoost(localTime);
-            return buildResponse(handlerInput, localTime);
-        }
-
-        if (duration.isPresent()) {
-            return duration
-                    .map(zappiService::startSmartBoost)
-                    .map(lt -> buildResponse(handlerInput, lt))
-                    .orElseGet(() -> buildNotFoundResponse(handlerInput));
+            if (duration.isPresent()) {
+                return duration
+                        .map(zappiService::startSmartBoost)
+                        .map(lt -> buildResponse(handlerInput, lt))
+                        .orElseGet(() -> buildNotFoundResponse(handlerInput));
+            }
+        } catch (ClientException e) {
+            String errorMessage = "Could not authenticate with myenergi API, please check your API key and serial number";
+            return handlerInput.getResponseBuilder()
+                    .withSpeech(errorMessage)
+                    .withSimpleCard(MyZappi.TITLE, errorMessage)
+                    .build();
         }
 
         return buildNotFoundResponse(handlerInput);

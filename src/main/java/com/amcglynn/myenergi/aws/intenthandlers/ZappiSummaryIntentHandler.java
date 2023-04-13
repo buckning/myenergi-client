@@ -9,6 +9,7 @@ import com.amazon.ask.model.services.directive.SpeakDirective;
 import com.amcglynn.myenergi.aws.MyZappi;
 import com.amcglynn.myenergi.aws.responses.ZappiStatusSummaryCardResponse;
 import com.amcglynn.myenergi.aws.responses.ZappiStatusSummaryVoiceResponse;
+import com.amcglynn.myenergi.exception.ClientException;
 import com.amcglynn.myenergi.service.ZappiService;
 
 import java.util.Optional;
@@ -35,10 +36,18 @@ public class ZappiSummaryIntentHandler implements RequestHandler {
                         .withHeader(Header.builder().withRequestId(handlerInput.getRequestEnvelope().getRequest().getRequestId()).build())
                         .build());
 
-        var summary = zappiService.getStatusSummary().get(0);
-        return handlerInput.getResponseBuilder()
-                .withSpeech(new ZappiStatusSummaryVoiceResponse(summary).toString())
-                .withSimpleCard(MyZappi.TITLE, new ZappiStatusSummaryCardResponse(summary).toString())
-                .build();
+        try {
+            var summary = zappiService.getStatusSummary().get(0);
+            return handlerInput.getResponseBuilder()
+                    .withSpeech(new ZappiStatusSummaryVoiceResponse(summary).toString())
+                    .withSimpleCard(MyZappi.TITLE, new ZappiStatusSummaryCardResponse(summary).toString())
+                    .build();
+        } catch (ClientException e) {
+            String errorMessage = "Could not authenticate with myenergi API, please check your API key and serial number";
+            return handlerInput.getResponseBuilder()
+                    .withSpeech(errorMessage)
+                    .withSimpleCard(MyZappi.TITLE, errorMessage)
+                    .build();
+        }
     }
 }
