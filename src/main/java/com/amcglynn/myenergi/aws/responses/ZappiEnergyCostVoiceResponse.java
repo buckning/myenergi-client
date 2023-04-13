@@ -9,7 +9,13 @@ public class ZappiEnergyCostVoiceResponse {
 
     public ZappiEnergyCostVoiceResponse(LocalDate date, double importCost, double exportCost,
                                         double solarConsumptionSavings) {
-        response = "Total cost for " + date + " is " + getEuroCost(importCost - exportCost) + ". ";
+        double cost = importCost - exportCost;
+        if (cost < 0) {
+            response = "Total credit for " + date + " is " + getEuroCost(Math.abs(cost)) + ". ";
+        } else {
+            response = "Total cost for " + date + " is " + getEuroCost(cost) + ". ";
+        }
+
         response += "You imported " + getEuroCost(importCost) + ". ";
         response += "You exported " + getEuroCost(exportCost) + ". ";
         response += "Total saved " + getEuroCost(solarConsumptionSavings + exportCost) + ". ";
