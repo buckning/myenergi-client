@@ -12,6 +12,7 @@ import com.amcglynn.myenergi.aws.intenthandlers.LaunchHandler;
 import com.amcglynn.myenergi.aws.intenthandlers.SetChargeModeIntentHandler;
 import com.amcglynn.myenergi.aws.intenthandlers.StartBoostIntentHandler;
 import com.amcglynn.myenergi.aws.intenthandlers.StopBoostIntentHandler;
+import com.amcglynn.myenergi.aws.intenthandlers.StopIntentHandler;
 import com.amcglynn.myenergi.aws.intenthandlers.ZappiSummaryIntentHandler;
 import com.amcglynn.myenergi.service.ZappiService;
 
@@ -34,6 +35,7 @@ public class MySkillStreamHandler extends SkillStreamHandler {
                 .addRequestHandler(new GetPlugStatusIntentHandler(zappiService))
                 .addRequestHandler(new GetEnergyUsageIntentHandler(zappiService))
                 .addRequestHandler(new GetEnergyCostIntentHandler(zappiService))
+                .addRequestHandler(new StopIntentHandler())
                 .build());
     }
 }

@@ -13,6 +13,7 @@ import com.amcglynn.myenergi.aws.responses.ZappiDaySummaryCardResponse;
 import com.amcglynn.myenergi.aws.responses.ZappiDaySummaryVoiceResponse;
 import com.amcglynn.myenergi.aws.responses.ZappiMonthSummaryCardResponse;
 import com.amcglynn.myenergi.aws.responses.ZappiMonthSummaryVoiceResponse;
+import com.amcglynn.myenergi.exception.ClientException;
 import com.amcglynn.myenergi.service.ZappiService;
 
 import java.time.LocalDate;
@@ -50,6 +51,12 @@ public class GetEnergyUsageIntentHandler implements RequestHandler {
                         .withSpeech("You cannot request usage data for a time in the future.")
                         .withSimpleCard(MyZappi.TITLE,
                                 "You cannot request usage data for a time in the future.")
+                        .build();
+            } catch (ClientException e) {
+                String errorMessage = "Could not authenticate with myenergi API, please check your API key and serial number";
+                return handlerInput.getResponseBuilder()
+                        .withSpeech(errorMessage)
+                        .withSimpleCard(MyZappi.TITLE, errorMessage)
                         .build();
             }
         }

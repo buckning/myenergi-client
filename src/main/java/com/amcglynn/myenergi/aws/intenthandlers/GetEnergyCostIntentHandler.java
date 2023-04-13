@@ -9,6 +9,7 @@ import com.amcglynn.myenergi.aws.exception.InvalidDateException;
 import com.amcglynn.myenergi.aws.responses.ZappiEnergyCostCardResponse;
 import com.amcglynn.myenergi.aws.responses.ZappiEnergyCostVoiceResponse;
 import com.amcglynn.myenergi.energycost.ImportedEnergyHourSummary;
+import com.amcglynn.myenergi.exception.ClientException;
 import com.amcglynn.myenergi.service.ZappiService;
 
 import java.time.LocalDate;
@@ -52,22 +53,29 @@ public class GetEnergyCostIntentHandler implements RequestHandler {
     }
 
     private Optional<Response> handleDate(HandlerInput handlerInput, String date) {
+        try {
+            var localDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
+            validate(localDate);
+            var history = zappiService.getHourlySummary(localDate);
+            var importCost = history.stream().mapToDouble(ImportedEnergyHourSummary::getImportCost).sum();
+            var exportCost = history.stream().mapToDouble(ImportedEnergyHourSummary::getExportCost).sum();
+            var solarSavings = history.stream().mapToDouble(ImportedEnergyHourSummary::getSolarSavings).sum();
 
-        var localDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
-        validate(localDate);
-        var history = zappiService.getHourlySummary(localDate);
-        var importCost = history.stream().mapToDouble(ImportedEnergyHourSummary::getImportCost).sum();
-        var exportCost = history.stream().mapToDouble(ImportedEnergyHourSummary::getExportCost).sum();
-        var solarSavings = history.stream().mapToDouble(ImportedEnergyHourSummary::getSolarSavings).sum();
+            var voiceResponse = new ZappiEnergyCostVoiceResponse(localDate, importCost, exportCost, solarSavings).toString();
+            var cardResponse = new ZappiEnergyCostCardResponse(localDate, importCost, exportCost, solarSavings).toString();
 
-        var voiceResponse = new ZappiEnergyCostVoiceResponse(localDate, importCost, exportCost, solarSavings).toString();
-        var cardResponse = new ZappiEnergyCostCardResponse(localDate, importCost, exportCost, solarSavings).toString();
-
-        return handlerInput.getResponseBuilder()
-                .withSpeech(voiceResponse)
-                .withSimpleCard(MyZappi.TITLE,
-                        cardResponse)
-                .build();
+            return handlerInput.getResponseBuilder()
+                    .withSpeech(voiceResponse)
+                    .withSimpleCard(MyZappi.TITLE,
+                            cardResponse)
+                    .build();
+        } catch (ClientException e) {
+            String errorMessage = "Could not authenticate with myenergi API, please check your API key and serial number";
+            return handlerInput.getResponseBuilder()
+                    .withSpeech(errorMessage)
+                    .withSimpleCard(MyZappi.TITLE, errorMessage)
+                    .build();
+        }
     }
 
     private void validate(LocalDate date) {
