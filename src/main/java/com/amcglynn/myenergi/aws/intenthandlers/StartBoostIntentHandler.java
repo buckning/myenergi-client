@@ -6,7 +6,7 @@ import com.amazon.ask.model.Response;
 import com.amazon.ask.request.RequestHelper;
 import com.amcglynn.myenergi.aws.MyZappi;
 import com.amcglynn.myenergi.exception.ClientException;
-import com.amcglynn.myenergi.service.ZappiService;
+import com.amcglynn.myenergi.service.ZappiServiceFactory;
 import com.amcglynn.myenergi.units.KiloWattHour;
 
 import java.time.Duration;
@@ -18,10 +18,10 @@ import static com.amazon.ask.request.Predicates.intentName;
 
 public class StartBoostIntentHandler implements RequestHandler {
 
-    private final ZappiService zappiService;
+    private final ZappiServiceFactory factory;
 
-    public StartBoostIntentHandler(ZappiService zappiService) {
-        this.zappiService = zappiService;
+    public StartBoostIntentHandler(ZappiServiceFactory factory) {
+        this.factory = factory;
     }
 
     @Override
@@ -35,6 +35,7 @@ public class StartBoostIntentHandler implements RequestHandler {
         var time = parseSlot(handlerInput, "Time");
         var kilowattHours = parseKiloWattHourSlot(handlerInput);
         try {
+            var zappiService = factory.newZappiService(handlerInput.getRequestEnvelope().getSession().getUser().getUserId());
             if (kilowattHours.isPresent()) {
                 zappiService.startBoost(kilowattHours.get());
                 return buildResponse(handlerInput, kilowattHours.get());

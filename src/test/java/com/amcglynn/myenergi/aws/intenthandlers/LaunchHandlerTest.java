@@ -5,6 +5,8 @@ import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.LaunchRequest;
 import com.amazon.ask.model.RequestEnvelope;
+import com.amazon.ask.model.Session;
+import com.amazon.ask.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -61,6 +63,7 @@ class LaunchHandlerTest {
 
     private RequestEnvelope.Builder requestEnvelopeBuilder() {
         return RequestEnvelope.builder()
-                .withRequest(launchRequest);
+                .withRequest(launchRequest)
+                .withSession(Session.builder().withUser(User.builder().withUserId("test").build()).build());
     }
 }

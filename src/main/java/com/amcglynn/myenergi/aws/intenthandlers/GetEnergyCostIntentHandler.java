@@ -20,12 +20,6 @@ import static com.amazon.ask.request.Predicates.intentName;
 
 public class GetEnergyCostIntentHandler implements RequestHandler {
 
-    private final ZappiService zappiService;
-
-    public GetEnergyCostIntentHandler(ZappiService zappiService) {
-        this.zappiService = zappiService;
-    }
-
     @Override
     public boolean canHandle(HandlerInput handlerInput) {
         return handlerInput.matches(intentName("GetEnergyCost"));
@@ -54,6 +48,7 @@ public class GetEnergyCostIntentHandler implements RequestHandler {
 
     private Optional<Response> handleDate(HandlerInput handlerInput, String date) {
         try {
+            var zappiService = new ZappiService(handlerInput.getRequestEnvelope().getSession().getUser().getUserId());
             var localDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
             validate(localDate);
             var history = zappiService.getHourlySummary(localDate);

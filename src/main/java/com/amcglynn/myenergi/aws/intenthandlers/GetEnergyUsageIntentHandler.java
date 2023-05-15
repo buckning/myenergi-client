@@ -14,7 +14,7 @@ import com.amcglynn.myenergi.aws.responses.ZappiDaySummaryVoiceResponse;
 import com.amcglynn.myenergi.aws.responses.ZappiMonthSummaryCardResponse;
 import com.amcglynn.myenergi.aws.responses.ZappiMonthSummaryVoiceResponse;
 import com.amcglynn.myenergi.exception.ClientException;
-import com.amcglynn.myenergi.service.ZappiService;
+import com.amcglynn.myenergi.service.ZappiServiceFactory;
 
 import java.time.LocalDate;
 import java.time.Year;
@@ -26,12 +26,11 @@ import static com.amazon.ask.request.Predicates.intentName;
 
 public class GetEnergyUsageIntentHandler implements RequestHandler {
 
-    private final ZappiService zappiService;
+    private final ZappiServiceFactory factory;
 
-    public GetEnergyUsageIntentHandler(ZappiService zappiService) {
-        this.zappiService = zappiService;
+    public GetEnergyUsageIntentHandler(ZappiServiceFactory factory) {
+        this.factory = factory;
     }
-
     @Override
     public boolean canHandle(HandlerInput handlerInput) {
         return handlerInput.matches(intentName("GetEnergyUsage"));
@@ -70,6 +69,7 @@ public class GetEnergyUsageIntentHandler implements RequestHandler {
     private Optional<Response> handleDate(HandlerInput handlerInput, String date) {
         String cardResponse;
         String voiceResponse;
+        var zappiService = factory.newZappiService(handlerInput.getRequestEnvelope().getSession().getUser().getUserId());
         if (date.length() == 4) {
             zappiService.getEnergyUsage(Year.parse(date));
             return handlerInput.getResponseBuilder()

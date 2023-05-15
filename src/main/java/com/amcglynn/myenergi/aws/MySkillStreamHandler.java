@@ -14,27 +14,27 @@ import com.amcglynn.myenergi.aws.intenthandlers.StartBoostIntentHandler;
 import com.amcglynn.myenergi.aws.intenthandlers.StopBoostIntentHandler;
 import com.amcglynn.myenergi.aws.intenthandlers.StopIntentHandler;
 import com.amcglynn.myenergi.aws.intenthandlers.ZappiSummaryIntentHandler;
-import com.amcglynn.myenergi.service.ZappiService;
+import com.amcglynn.myenergi.service.ZappiServiceFactory;
 
 public class MySkillStreamHandler extends SkillStreamHandler {
 
     public MySkillStreamHandler() {
-        this(new ZappiService());
+        this(new ZappiServiceFactory());
     }
 
-    public MySkillStreamHandler(ZappiService zappiService) {
+    public MySkillStreamHandler(ZappiServiceFactory factory) {
         super(Skills.standard()
                 .addRequestHandler(new LaunchHandler())
                 .addRequestHandler(new FallbackIntentHandler())
-                .addRequestHandler(new StartBoostIntentHandler(zappiService))
-                .addRequestHandler(new ZappiSummaryIntentHandler(zappiService))
-                .addRequestHandler(new StopBoostIntentHandler(zappiService))
-                .addRequestHandler(new SetChargeModeIntentHandler(zappiService))
-                .addRequestHandler(new ChargeMyCarIntentHandler(zappiService))
-                .addRequestHandler(new GoGreenIntentHandler(zappiService))
-                .addRequestHandler(new GetPlugStatusIntentHandler(zappiService))
-                .addRequestHandler(new GetEnergyUsageIntentHandler(zappiService))
-                .addRequestHandler(new GetEnergyCostIntentHandler(zappiService))
+                .addRequestHandler(new StartBoostIntentHandler(factory))
+                .addRequestHandler(new ZappiSummaryIntentHandler(factory))
+                .addRequestHandler(new StopBoostIntentHandler(factory))
+                .addRequestHandler(new SetChargeModeIntentHandler(factory))
+                .addRequestHandler(new ChargeMyCarIntentHandler(factory))
+                .addRequestHandler(new GoGreenIntentHandler(factory))
+                .addRequestHandler(new GetPlugStatusIntentHandler(factory))
+                .addRequestHandler(new GetEnergyUsageIntentHandler(factory))
+                .addRequestHandler(new GetEnergyCostIntentHandler())
                 .addRequestHandler(new StopIntentHandler())
                 .build());
     }

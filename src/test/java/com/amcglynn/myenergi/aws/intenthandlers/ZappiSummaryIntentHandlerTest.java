@@ -4,6 +4,8 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.RequestEnvelope;
+import com.amazon.ask.model.Session;
+import com.amazon.ask.model.User;
 import com.amazon.ask.model.services.ServiceClientFactory;
 import com.amazon.ask.model.services.directive.DirectiveServiceClient;
 import com.amazon.ask.model.services.directive.SendDirectiveRequest;
@@ -14,6 +16,7 @@ import com.amcglynn.myenergi.ZappiChargeMode;
 import com.amcglynn.myenergi.ZappiStatusSummary;
 import com.amcglynn.myenergi.apiresponse.ZappiStatus;
 import com.amcglynn.myenergi.service.ZappiService;
+import com.amcglynn.myenergi.service.ZappiServiceFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +30,7 @@ import java.util.List;
 import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySimpleCardInResponse;
 import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySpeechInResponse;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -35,6 +39,8 @@ class ZappiSummaryIntentHandlerTest {
 
     @Mock
     private ZappiService mockZappiService;
+    @Mock
+    private ZappiServiceFactory mockZappiServiceFactory;
     @Mock
     private ServiceClientFactory mockServiceClientFactory;
     @Mock
@@ -47,7 +53,7 @@ class ZappiSummaryIntentHandlerTest {
 
     @BeforeEach
     void setUp() {
-        handler = new ZappiSummaryIntentHandler(mockZappiService);
+        handler = new ZappiSummaryIntentHandler(mockZappiServiceFactory);
         intentRequest = IntentRequest.builder()
                 .withIntent(Intent.builder().withName("StatusSummary").build())
                 .build();
@@ -69,6 +75,7 @@ class ZappiSummaryIntentHandlerTest {
 
     @Test
     void testHandleSendsProgressiveResponseAndReturnsSummary() {
+        when(mockZappiServiceFactory.newZappiService(anyString())).thenReturn(mockZappiService);
         when(mockServiceClientFactory.getDirectiveService()).thenReturn(mockDirectiveServiceClient);
         when(mockZappiService.getStatusSummary()).thenReturn(List.of(new ZappiStatusSummary(
                 new ZappiStatus("12345678", 1500L, 1400L,
@@ -101,6 +108,7 @@ class ZappiSummaryIntentHandlerTest {
 
     private RequestEnvelope.Builder requestEnvelopeBuilder() {
         return RequestEnvelope.builder()
-                .withRequest(intentRequest);
+                .withRequest(intentRequest)
+                .withSession(Session.builder().withUser(User.builder().withUserId("test").build()).build());
     }
 }

@@ -5,7 +5,7 @@ import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
 import com.amcglynn.myenergi.aws.MyZappi;
 import com.amcglynn.myenergi.exception.ClientException;
-import com.amcglynn.myenergi.service.ZappiService;
+import com.amcglynn.myenergi.service.ZappiServiceFactory;
 
 import java.util.Optional;
 
@@ -13,10 +13,10 @@ import static com.amazon.ask.request.Predicates.intentName;
 
 public class StopBoostIntentHandler implements RequestHandler {
 
-    private final ZappiService zappiService;
+    private final ZappiServiceFactory factory;
 
-    public StopBoostIntentHandler(ZappiService zappiService) {
-        this.zappiService = zappiService;
+    public StopBoostIntentHandler(ZappiServiceFactory factory) {
+        this.factory = factory;
     }
 
     @Override
@@ -27,6 +27,7 @@ public class StopBoostIntentHandler implements RequestHandler {
     @Override
     public Optional<Response> handle(HandlerInput handlerInput) {
         try {
+            var zappiService = factory.newZappiService(handlerInput.getRequestEnvelope().getSession().getUser().getUserId());
             zappiService.stopBoost();
             return handlerInput.getResponseBuilder()
                     .withSpeech("Stopping boost mode now.")

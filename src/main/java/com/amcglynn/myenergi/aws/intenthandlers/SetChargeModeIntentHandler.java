@@ -7,7 +7,7 @@ import com.amazon.ask.model.Response;
 import com.amcglynn.myenergi.aws.AlexaZappiChargeModeMapper;
 import com.amcglynn.myenergi.aws.MyZappi;
 import com.amcglynn.myenergi.exception.ClientException;
-import com.amcglynn.myenergi.service.ZappiService;
+import com.amcglynn.myenergi.service.ZappiServiceFactory;
 
 import java.util.Optional;
 
@@ -15,12 +15,12 @@ import static com.amazon.ask.request.Predicates.intentName;
 
 public class SetChargeModeIntentHandler implements RequestHandler {
 
-    private final ZappiService zappiService;
     private final AlexaZappiChargeModeMapper mapper;
+    private final ZappiServiceFactory factory;
 
-    public SetChargeModeIntentHandler(ZappiService zappiService) {
-        this.zappiService = zappiService;
+    public SetChargeModeIntentHandler(ZappiServiceFactory factory) {
         mapper = new AlexaZappiChargeModeMapper();
+        this.factory = factory;
     }
 
     @Override
@@ -31,6 +31,7 @@ public class SetChargeModeIntentHandler implements RequestHandler {
     @Override
     public Optional<Response> handle(HandlerInput handlerInput) {
         try {
+            var zappiService = factory.newZappiService(handlerInput.getRequestEnvelope().getSession().getUser().getUserId());
             var request = handlerInput.getRequestEnvelope().getRequest();
             var intentRequest = (IntentRequest) request;
             var slots = intentRequest.getIntent().getSlots();

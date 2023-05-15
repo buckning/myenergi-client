@@ -6,7 +6,7 @@ import com.amazon.ask.model.Response;
 import com.amcglynn.myenergi.ZappiChargeMode;
 import com.amcglynn.myenergi.aws.MyZappi;
 import com.amcglynn.myenergi.exception.ClientException;
-import com.amcglynn.myenergi.service.ZappiService;
+import com.amcglynn.myenergi.service.ZappiServiceFactory;
 
 import java.util.Optional;
 
@@ -14,10 +14,10 @@ import static com.amazon.ask.request.Predicates.intentName;
 
 public class GoGreenIntentHandler implements RequestHandler {
 
-    private final ZappiService zappiService;
+    private final ZappiServiceFactory factory;
 
-    public GoGreenIntentHandler(ZappiService zappiService) {
-        this.zappiService = zappiService;
+    public GoGreenIntentHandler(ZappiServiceFactory factory) {
+        this.factory = factory;
     }
 
     @Override
@@ -28,6 +28,7 @@ public class GoGreenIntentHandler implements RequestHandler {
     @Override
     public Optional<Response> handle(HandlerInput handlerInput) {
         try {
+            var zappiService = factory.newZappiService(handlerInput.getRequestEnvelope().getSession().getUser().getUserId());
             zappiService.setChargeMode(ZappiChargeMode.ECO_PLUS);
             var result = "Changed charging mode to Eco+. This may take a few minutes.";
             return handlerInput.getResponseBuilder()

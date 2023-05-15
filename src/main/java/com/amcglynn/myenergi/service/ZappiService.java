@@ -5,13 +5,14 @@ import com.amcglynn.myenergi.ZappiChargeMode;
 import com.amcglynn.myenergi.ZappiDaySummary;
 import com.amcglynn.myenergi.ZappiMonthSummary;
 import com.amcglynn.myenergi.ZappiStatusSummary;
+import com.amcglynn.myenergi.aws.ZappiCredentialRepository;
 import com.amcglynn.myenergi.energycost.ImportedEnergyHourSummary;
+import com.amcglynn.myenergi.exception.ClientException;
 import com.amcglynn.myenergi.units.KiloWattHour;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Year;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -25,16 +26,20 @@ public class ZappiService {
     private final Supplier<LocalTime> localTimeSupplier;
     private ZappiServiceNotificationListener listener;
 
-    public ZappiService() {
-        var apiKey = System.getenv("myEnergiHubApiKey");
-        var serialNumber = System.getenv("myEnergiHubSerialNumber");
-        this.client = new MyEnergiClient(serialNumber, apiKey);
+    public ZappiService(String userId) {
         this.localTimeSupplier = LocalTime::now;
+        var repository = new ZappiCredentialRepository();
+        var creds = repository.readData(userId);
+        if (creds.isPresent()) {
+            client = new MyEnergiClient(creds.get().getSerialNumber(), creds.get().getApiKey());
+        } else {
+            throw new ClientException(0);
+        }
     }
 
     public ZappiService(MyEnergiClient client, Supplier<LocalTime> localTimeSupplier) {
-        this.client = client;
         this.localTimeSupplier = localTimeSupplier;
+        this.client = client;
     }
 
     public List<ZappiStatusSummary> getStatusSummary() {
@@ -83,10 +88,6 @@ public class ZappiService {
                 .map(dayHistory -> new ZappiDaySummary(dayHistory.getReadings()))
                 .collect(Collectors.toList());
         return new ZappiMonthSummary(yearMonth, result);
-    }
-
-    public void getEnergyUsage(Year year) {
-
     }
 
     public List<ImportedEnergyHourSummary> getHourlySummary(LocalDate date) {

@@ -3,36 +3,23 @@ package com.amcglynn.myenergi.aws.intenthandlers;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
-import com.amazon.ask.model.services.directive.Header;
-import com.amazon.ask.model.services.directive.SendDirectiveRequest;
-import com.amazon.ask.model.services.directive.SpeakDirective;
-import com.amazon.ask.request.RequestHelper;
 import com.amcglynn.myenergi.EvStatusSummary;
 import com.amcglynn.myenergi.aws.MyZappi;
-import com.amcglynn.myenergi.aws.exception.InvalidDateException;
-import com.amcglynn.myenergi.aws.responses.ZappiDaySummaryCardResponse;
-import com.amcglynn.myenergi.aws.responses.ZappiDaySummaryVoiceResponse;
 import com.amcglynn.myenergi.aws.responses.ZappiEvConnectionStatusCardResponse;
 import com.amcglynn.myenergi.aws.responses.ZappiEvConnectionStatusVoiceResponse;
-import com.amcglynn.myenergi.aws.responses.ZappiMonthSummaryCardResponse;
-import com.amcglynn.myenergi.aws.responses.ZappiMonthSummaryVoiceResponse;
 import com.amcglynn.myenergi.exception.ClientException;
-import com.amcglynn.myenergi.service.ZappiService;
+import com.amcglynn.myenergi.service.ZappiServiceFactory;
 
-import java.time.LocalDate;
-import java.time.Year;
-import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import static com.amazon.ask.request.Predicates.intentName;
 
 public class GetPlugStatusIntentHandler implements RequestHandler {
 
-    private final ZappiService zappiService;
+    private ZappiServiceFactory factory;
 
-    public GetPlugStatusIntentHandler(ZappiService zappiService) {
-        this.zappiService = zappiService;
+    public GetPlugStatusIntentHandler(ZappiServiceFactory factory) {
+        this.factory = factory;
     }
 
     @Override
@@ -43,6 +30,7 @@ public class GetPlugStatusIntentHandler implements RequestHandler {
     @Override
     public Optional<Response> handle(HandlerInput handlerInput) {
         try {
+            var zappiService = factory.newZappiService(handlerInput.getRequestEnvelope().getSession().getUser().getUserId());
             var summary = new EvStatusSummary(zappiService.getStatusSummary().get(0));
 
             return handlerInput.getResponseBuilder()

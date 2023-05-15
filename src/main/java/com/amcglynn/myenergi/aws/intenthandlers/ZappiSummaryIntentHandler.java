@@ -10,17 +10,18 @@ import com.amcglynn.myenergi.aws.MyZappi;
 import com.amcglynn.myenergi.aws.responses.ZappiStatusSummaryCardResponse;
 import com.amcglynn.myenergi.aws.responses.ZappiStatusSummaryVoiceResponse;
 import com.amcglynn.myenergi.exception.ClientException;
-import com.amcglynn.myenergi.service.ZappiService;
+import com.amcglynn.myenergi.service.ZappiServiceFactory;
 
 import java.util.Optional;
 
 import static com.amazon.ask.request.Predicates.intentName;
 
 public class ZappiSummaryIntentHandler implements RequestHandler {
-    private final ZappiService zappiService;
 
-    public ZappiSummaryIntentHandler(ZappiService zappiService) {
-        this.zappiService = zappiService;
+    private final ZappiServiceFactory factory;
+
+    public ZappiSummaryIntentHandler(ZappiServiceFactory factory) {
+        this.factory = factory;
     }
 
     @Override
@@ -37,6 +38,7 @@ public class ZappiSummaryIntentHandler implements RequestHandler {
                         .build());
 
         try {
+            var zappiService = factory.newZappiService(handlerInput.getRequestEnvelope().getSession().getUser().getUserId());
             var summary = zappiService.getStatusSummary().get(0);
             return handlerInput.getResponseBuilder()
                     .withSpeech(new ZappiStatusSummaryVoiceResponse(summary).toString())

@@ -4,14 +4,19 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Intent;
 import com.amazon.ask.model.IntentRequest;
 import com.amazon.ask.model.RequestEnvelope;
+import com.amazon.ask.model.Session;
 import com.amazon.ask.model.Slot;
+import com.amazon.ask.model.User;
 import com.amcglynn.myenergi.service.ZappiService;
+import com.amcglynn.myenergi.service.ZappiServiceFactory;
 import com.amcglynn.myenergi.units.KiloWattHour;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -21,21 +26,26 @@ import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySimpleCardInRespo
 import static com.amcglynn.myenergi.aws.ResponseVerifier.verifySpeechInResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class StartBoostIntentHandlerTest {
 
     @Mock
     private ZappiService mockZappiService;
+    @Mock
+    private ZappiServiceFactory mockZappiServiceFactory;
     private IntentRequest intentRequest;
 
     private StartBoostIntentHandler handler;
 
     @BeforeEach
     void setUp() {
-        handler = new StartBoostIntentHandler(mockZappiService);
+        when(mockZappiServiceFactory.newZappiService(anyString())).thenReturn(mockZappiService);
+        handler = new StartBoostIntentHandler(mockZappiServiceFactory);
         initIntentRequest("Duration", "PT25M");
     }
 
@@ -107,7 +117,8 @@ class StartBoostIntentHandlerTest {
 
     private RequestEnvelope.Builder requestEnvelopeBuilder() {
         return RequestEnvelope.builder()
-                .withRequest(intentRequest);
+                .withRequest(intentRequest)
+                .withSession(Session.builder().withUser(User.builder().withUserId("test").build()).build());
     }
 
     private void initIntentRequest(String slotName, String slotValue) {
