@@ -1,3 +1,5 @@
+# This project is retired and selected parts were incorporated in https://github.com/buckning/myzappi
+
 # Client to interact with the myenergi API
 
 The APIs are documented on the [MyEnergi-App-Api Github page](https://github.com/twonk/MyEnergi-App-Api).
